@@ -17,30 +17,35 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
+          // Update cookies di request agar client client tahu
           request.cookies.set({ name, value, ...options })
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
           })
+          // Update cookies di response agar tertulis di browser
           response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({ name, value, ...options })
+          // PERBAIKAN: Gunakan string kosong karena 'value' tidak ada di parameter remove
+          request.cookies.set({ name, value: '', ...options })
           response = NextResponse.next({
             request: {
               headers: request.headers,
             },
           })
-          response.cookies.set({ name, value, ...options })
+          response.cookies.set({ name, value: '', ...options })
         },
       },
     }
   )
 
+  // Penting: getUser() akan me-refresh session jika perlu
   const { data: { user } } = await supabase.auth.getUser()
 
   // Proteksi Halaman Admin
+  // Jika akses /admin tapi tidak ada user dan bukan di halaman login, lempar ke /login
   if (request.nextUrl.pathname.startsWith('/admin') && !user && !request.nextUrl.pathname.includes('/login')) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
