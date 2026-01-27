@@ -5,12 +5,6 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -19,8 +13,72 @@
   }
 }
 
+@theme {
+  --color-gold: #D4AF37;
+  --color-gold-dark: #B8860B;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.sparkle-hover:hover {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@layer utilities {
+  .bg-sparkle {
+    background-image: radial-gradient(circle, #D4AF37 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.1;
+  }
+}
+
+:root {
+  --gold: #D4AF37;
+  --silver: #C0C0C0;
+}
+
+/* Animasi kilau lembut untuk elemen emas */
+@keyframes sparkle {
+  0% { transform: scale(1) opacity(0.5); }
+  50% { transform: scale(1.2) opacity(1); }
+  100% { transform: scale(1) opacity(0.5); }
+}
+
+.sparkle-element {
+  animation: sparkle 2s infinite ease-in-out;
+}
+
+/* Shimmer effect untuk button emas */
+.btn-gold-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gold-shimmer::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: 0.8s;
+}
+
+.btn-gold-shimmer:hover::after {
+  left: 100%;
 }
