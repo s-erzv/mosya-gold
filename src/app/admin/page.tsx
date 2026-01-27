@@ -12,7 +12,7 @@ export default function AdminPage() {
       if (session) {
         router.replace("/admin/dashboard");
       } else {
-        router.replace("/admin/login");
+        router.replace("/login");
       }
     };
     checkUser();

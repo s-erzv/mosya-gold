@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
 
   // Proteksi Halaman Admin
   if (request.nextUrl.pathname.startsWith('/admin') && !user && !request.nextUrl.pathname.includes('/login')) {
-    return NextResponse.redirect(new URL('/admin/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   return response
