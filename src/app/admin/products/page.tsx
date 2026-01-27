@@ -124,7 +124,7 @@ export default function ProductManagement() {
                 <div className="relative aspect-square overflow-hidden bg-gray-50 dark:bg-gray-900">
                   <img src={product.image_url} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[10px] font-black uppercase tracking-widest rounded-full text-[#1A1D23] shadow-sm">
+                    <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[10px] font-black  tracking-widest rounded-full text-[#1A1D23] shadow-sm">
                       {product.category}
                     </span>
                   </div>
@@ -189,7 +189,7 @@ export default function ProductManagement() {
 
                 <form onSubmit={handleUpdate} className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Nama Produk</label>
+                    <label className="text-[10px] font-black  tracking-widest text-gray-400 ml-1">Nama Produk</label>
                     <input 
                       type="text" 
                       required
@@ -201,7 +201,7 @@ export default function ProductManagement() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Harga (Rp)</label>
+                      <label className="text-[10px] font-black  tracking-widest text-gray-400 ml-1">Harga (Rp)</label>
                       <input 
                         type="number" 
                         required
@@ -211,7 +211,7 @@ export default function ProductManagement() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Kategori</label>
+                      <label className="text-[10px] font-black  tracking-widest text-gray-400 ml-1">Kategori</label>
                       <select 
                         value={editingProduct?.category || ""}
                         onChange={(e) => setEditingProduct({...editingProduct, category: e.target.value})}

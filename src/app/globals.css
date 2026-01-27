@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
   --background: #ffffff;
@@ -86,4 +87,24 @@ body {
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* src/app/globals.css */
+.ProseMirror h1 {
+  @apply text-4xl font-bold mb-4;
+}
+.ProseMirror h2 {
+  @apply text-3xl font-bold mb-3;
+}
+.ProseMirror h3 {
+  @apply text-2xl font-bold mb-2;
+}
+.ProseMirror ul {
+  @apply list-disc ml-4;
+}
+.ProseMirror ol {
+  @apply list-decimal ml-4;
+}
+.ProseMirror strong {
+  @apply font-bold;
 }

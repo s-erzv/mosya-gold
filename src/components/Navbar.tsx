@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Hook untuk mendeteksi URL aktif
+import { usePathname } from "next/navigation";
 import { Menu, X, Moon, Sun, ShoppingBag } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,7 +11,7 @@ export default function Navbar() {
   const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname(); // Ambil path saat ini
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -20,7 +20,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Tutup menu mobile otomatis saat berpindah halaman
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
@@ -41,7 +40,6 @@ export default function Navbar() {
     { name: "Blog", href: "/blog" },
   ];
 
-  // Helper function untuk cek apakah link sedang aktif
   const isActive = (href: string) => {
     if (href === "/" && pathname === "/") return true;
     if (href !== "/" && pathname.startsWith(href)) return true;
@@ -50,118 +48,98 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav 
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed w-full z-[60] transition-all duration-500 ${
-          scrolled 
-            ? "bg-white/80 dark:bg-[#0A0B0D]/80 backdrop-blur-2xl py-6 shadow-md border-b border-[#E5E7EB]/50 dark:border-[#2D3748]/50" 
-            : "bg-transparent py-5"
-        }`}
-      >
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="flex items-center gap-2 group z-[70]">
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-serif font-bold text-xl sm:text-2xl tracking-tight text-[#1A1D23] dark:text-white">
-                  Mosya <span className="bg-gradient-to-r from-[#C9A961] to-[#D4AF37] bg-clip-text text-transparent whitespace-nowrap">
-                  Gold
+      <div className="fixed w-full top-0 left-0 z-[60] px-4 sm:px-6 lg:px-8 pt-4 pointer-events-none">
+        <motion.nav 
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: "circOut" }}
+          className={`mx-auto max-w-[95rem] pointer-events-auto transition-all duration-500 rounded-[28px] border ${
+            scrolled 
+              ? "bg-white/90 dark:bg-[#0A0B0D]/90 backdrop-blur-2xl py-3 shadow-2xl border-[#C9A961]/20 shadow-[#C9A961]/5" 
+              : "bg-white/10 dark:bg-black/10 backdrop-blur-md py-4 border-white/10"
+          }`}
+        >
+          <div className="px-6 sm:px-8 lg:px-10">
+            <div className="flex justify-between items-center">
+              {/* Logo Area - Gedein dikit fontnya */}
+              <Link href="/" className="flex items-center gap-2 group z-[70]">
+                <span className="font-serif font-black text-2xl sm:text-3xl tracking-tighter text-[#1A1D23] dark:text-white transition-transform group-hover:scale-105">
+                  Mosya <span className="bg-gradient-to-r from-[#C9A961] to-[#D4AF37] bg-clip-text text-transparent">Gold</span>
                 </span>
-                </span>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`relative px-5 py-2.5 text-sm font-semibold transition-all duration-300 rounded-xl group ${
-                    isActive(link.href)
-                      ? "text-[#C9A961]"
-                      : "text-[#4A5568] dark:text-[#A0AEC0] hover:text-[#1A1D23] dark:hover:text-white"
-                  }`}
-                >
-                  {link.name}
-                  {isActive(link.href) && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 bg-[#C9A961]/10 dark:bg-[#C9A961]/20 rounded-xl -z-10"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                  <span className={`absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-[#C9A961] to-[#D4AF37] transition-all duration-300 ${
-                    isActive(link.href) ? "w-8" : "w-0 group-hover:w-8"
-                  }`} />
-                </Link>
-              ))}
-            </div>
-
-            <div className="hidden lg:flex items-center gap-3">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="p-2.5 bg-[#FAFBFC] dark:bg-[#1A1D23] border border-[#E5E7EB] dark:border-[#2D3748] rounded-xl hover:border-[#C9A961] dark:hover:border-[#C9A961] transition-all duration-300 group"
-                aria-label="Toggle Theme"
-              >
-                <AnimatePresence mode="wait">
-                  {theme === "dark" ? (
-                    <motion.div key="sun" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                      <Sun size={18} className="text-[#C9A961]" />
-                    </motion.div>
-                  ) : (
-                    <motion.div key="moon" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                      <Moon size={18} className="text-[#8B9DC3]" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.button>
-
-              <Link href="/katalog">
-                <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(201, 169, 97, 0.3)" }}
-                  whileTap={{ scale: 0.95 }}
-                  className="relative px-6 py-2.5 bg-gradient-to-r from-[#C9A961] via-[#D4AF37] to-[#C9A961] text-white text-sm font-bold rounded-xl shadow-lg shadow-[#C9A961]/30 overflow-hidden group"
-                >
-                  <span className="relative z-10 flex items-center gap-2 text-white">
-                    <ShoppingBag size={16} />
-                    Belanja Sekarang
-                  </span>
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{ x: ["-100%", "100%"] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  />
-                </motion.button>
               </Link>
+
+              {/* Desktop Navigation - Whitespace lebih rapat, Font lebih gede */}
+              <div className="hidden lg:flex items-center gap-2">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`relative px-6 py-3 text-base font-bold transition-all duration-300 rounded-2xl group ${
+                      isActive(link.href)
+                        ? "text-[#C9A961]"
+                        : "text-[#4A5568] dark:text-[#A0AEC0] hover:text-[#1A1D23] dark:hover:text-white"
+                    }`}
+                  >
+                    <span className="relative z-10">{link.name}</span>
+                    {isActive(link.href) && (
+                      <motion.div
+                        layoutId="activeNav"
+                        className="absolute inset-0 bg-[#C9A961]/10 dark:bg-[#C9A961]/20 rounded-2xl -z-0"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Right Side Actions */}
+              <div className="hidden lg:flex items-center gap-4">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="p-3 bg-white dark:bg-[#1A1D23] border border-[#E5E7EB] dark:border-[#2D3748] rounded-2xl hover:border-[#C9A961] shadow-sm transition-all duration-300"
+                  aria-label="Toggle Theme"
+                >
+                  <AnimatePresence mode="wait">
+                    {theme === "dark" ? (
+                      <motion.div key="sun" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+                        <Sun size={20} className="text-[#C9A961]" />
+                      </motion.div>
+                    ) : (
+                      <motion.div key="moon" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
+                        <Moon size={20} className="text-[#8B9DC3]" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+
+                <Link href="/katalog">
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center gap-3 px-8 py-3.5 bg-gradient-to-r from-[#C9A961] to-[#D4AF37] text-white text-base font-black rounded-2xl shadow-xl shadow-[#C9A961]/20 group"
+                  >
+                    <ShoppingBag size={20} strokeWidth={2.5} />
+                    <span>Belanja Sekarang</span>
+                  </motion.button>
+                </Link>
+              </div>
+
+              {/* Mobile Menu Toggle */}
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setIsOpen(!isOpen)}
+                className="lg:hidden p-3 text-[#1A1D23] dark:text-white z-[70]"
+              >
+                {isOpen ? <X size={32} /> : <Menu size={32} />}
+              </motion.button>
             </div>
-
-            {/* Mobile Menu Toggle */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 text-[#1A1D23] dark:text-white z-[70] relative"
-              aria-label="Toggle Menu"
-            >
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                    <X size={28} />
-                  </motion.div>
-                ) : (
-                  <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                    <Menu size={28} />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.button>
           </div>
-        </div>
-      </motion.nav>
+        </motion.nav>
+      </div>
 
+      {/* Mobile Menu Overlay - Desain tetap konsisten */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -169,74 +147,45 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-40 lg:hidden"
               onClick={() => setIsOpen(false)}
             />
-
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-white dark:bg-[#0A0B0D] z-50 lg:hidden flex flex-col shadow-2xl"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-sm bg-white dark:bg-[#0A0B0D] z-50 lg:hidden flex flex-col shadow-2xl p-8 pt-28"
             >
-              <div className="flex-1 flex flex-col pt-28 px-6 pb-8">
-                <div className="mb-8 text-left">
-                  <h2 className="text-2xl font-serif font-bold text-[#1A1D23] dark:text-white tracking-tight">Menu</h2>
-                  <div className="h-0.5 w-12 bg-gradient-to-r from-[#C9A961] to-[#D4AF37] mt-2" />
-                </div>
-
-                <div className="flex-1 space-y-2">
-                  {navLinks.map((link, index) => (
-                    <motion.div
-                      key={link.name}
-                      initial={{ x: 20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <Link
-                        href={link.href}
-                        className={`block px-6 py-4 rounded-2xl font-semibold transition-all duration-300 ${
-                          isActive(link.href)
-                            ? "bg-[#C9A961]/10 text-[#C9A961] border-l-4 border-[#C9A961]"
-                            : "text-[#4A5568] dark:text-[#A0AEC0] hover:bg-gray-50 dark:hover:bg-white/5"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-lg">{link.name}</span>
-                          <span className={isActive(link.href) ? "opacity-100" : "opacity-30"}>→</span>
-                        </div>
-                      </Link>
-                    </motion.div>
-                  ))}
-                </div>
-
-                <div className="space-y-4 pt-8">
-                  <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                    className="w-full flex items-center justify-between px-6 py-4 bg-[#FAFBFC] dark:bg-[#1A1D23] border border-[#E5E7EB] dark:border-[#2D3748] rounded-2xl"
+              <div className="flex-1 space-y-4">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`block px-8 py-5 rounded-3xl text-xl font-bold transition-all ${
+                      isActive(link.href)
+                        ? "bg-[#C9A961] text-white shadow-lg"
+                        : "text-[#4A5568] dark:text-[#A0AEC0]"
+                    }`}
                   >
-                    <span className="font-semibold text-[#1A1D23] dark:text-white">
-                      {theme === "dark" ? "Mode Terang" : "Mode Gelap"}
-                    </span>
-                    <div className="p-2 bg-white dark:bg-[#0A0B0D] rounded-xl">
-                      {theme === "dark" ? <Sun size={20} className="text-[#C9A961]" /> : <Moon size={20} className="text-[#8B9DC3]" />}
-                    </div>
-                  </motion.button>
-
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
-                    <Link href="/katalog">
-                      <button className="w-full px-6 py-4 bg-gradient-to-r from-[#C9A961] via-[#D4AF37] to-[#C9A961] text-white font-bold rounded-2xl shadow-lg flex items-center justify-center gap-2 group">
-                        <ShoppingBag size={20} />
-                        <span>Belanja Sekarang</span>
-                      </button>
-                    </Link>
-                  </motion.div>
-                </div>
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+              
+              <div className="pt-8 border-t border-gray-100 dark:border-gray-800 space-y-4">
+                <button 
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className="flex items-center justify-between w-full p-6 bg-gray-50 dark:bg-white/5 rounded-3xl text-lg font-bold"
+                >
+                  <span>Tema {theme === "dark" ? "Terang" : "Gelap"}</span>
+                  {theme === "dark" ? <Sun className="text-[#C9A961]" /> : <Moon className="text-[#C9A961]" />}
+                </button>
+                <Link href="/katalog">
+                  <button className="w-full py-6 bg-gradient-to-r from-[#C9A961] to-[#D4AF37] text-white font-black text-xl rounded-3xl shadow-xl flex items-center justify-center gap-3">
+                    <ShoppingBag size={24} /> Belanja Sekarang
+                  </button>
+                </Link>
               </div>
             </motion.div>
           </>

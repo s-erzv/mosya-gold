@@ -1,16 +1,38 @@
+"use client";
+import React from "react";
+import { MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
+
 export default function WhatsAppFloating() {
+  const phoneNumber = "6282112345678";
+  const message = "Halo Mosya Gold, saya tertarik dengan produk emas...";
+
   return (
-    <a 
-      href="https://wa.me/6282112345678?text=Halo%20Mosya%20Gold,%20saya%20tertarik%20dengan%20produk%20emas..."
-      target="_blank"
-      className="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group"
-    >
-      <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.025 3.2l-.719 2.637 2.709-.71c.883.52 1.861.85 2.753.85h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.18-2.586-5.767-5.769-5.767zm3.387 8.264c-.147.415-.703.749-1.152.827-.327.056-.749.073-1.203-.075-.3-.099-.665-.234-1.133-.433-1.991-.849-3.269-2.868-3.368-3.001-.1-.133-.808-1.071-.808-2.043 0-.972.508-1.449.689-1.683.18-.234.393-.293.524-.293l.377.006c.115 0 .27-.043.426.331.173.412.589 1.433.64 1.539.051.106.085.23.014.371-.071.141-.106.23-.212.353-.106.123-.223.275-.319.369-.107.106-.219.222-.094.436.125.214.557.917 1.196 1.487.822.732 1.516.958 1.729 1.064.212.106.338.089.464-.057.126-.146.541-.63.685-.845.143-.215.287-.181.484-.108s1.246.587 1.463.696c.217.108.361.164.414.258.054.094.054.544-.093.959z" />
-      </svg>
-      <span className="absolute right-full mr-4 bg-white dark:bg-zinc-800 text-zinc-800 dark:text-white px-4 py-2 rounded-lg text-xs font-bold shadow-xl opacity-0 group-hover:opacity-100 whitespace-nowrap transition-all border border-zinc-100 dark:border-zinc-700">
-        Konsultasi Sekarang
-      </span>
-    </a>
+    <div className="fixed bottom-8 right-8 z-[100] group">
+      {/* Tooltip Label */}
+      <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+        <div className="bg-white dark:bg-[#1A1D23] text-[#1A1D23] dark:text-white px-5 py-2.5 rounded-2xl text-xs font-bold shadow-2xl border border-gray-100 dark:border-gray-800 whitespace-nowrap">
+          Konsultasi Sekarang ✨
+        </div>
+      </div>
+
+      {/* Ping Animation Effect */}
+      <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-20 animate-ping"></span>
+
+      {/* Main Button */}
+      <motion.a
+        href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        className="relative flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-[0_10px_40px_-10px_rgba(37,211,102,0.5)] transition-all overflow-hidden"
+      >
+        {/* Glossy Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent pointer-events-none" />
+        
+        <MessageCircle size={32} strokeWidth={2.5} />
+      </motion.a>
+    </div>
   );
 }

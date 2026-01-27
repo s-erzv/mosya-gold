@@ -82,7 +82,7 @@ export default function AdminLogin() {
             </h1>
             <div className="flex items-center justify-center gap-2 mt-2">
               <ShieldCheck size={14} className="text-[#C9A961]" />
-              <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-black">
+              <p className="text-[10px] text-gray-400  tracking-[0.3em] font-black">
                 Administrator Portal
               </p>
             </div>
@@ -91,7 +91,7 @@ export default function AdminLogin() {
           {/* Login Form */}
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[11px] font-black uppercase tracking-widest text-[#4A5568] dark:text-[#A0AEC0] ml-1">
+              <label className="text-[11px] font-black  tracking-widest text-[#4A5568] dark:text-[#A0AEC0] ml-1">
                 Admin Credential
               </label>
               <div className="relative group">
@@ -107,7 +107,7 @@ export default function AdminLogin() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[11px] font-black uppercase tracking-widest text-[#4A5568] dark:text-[#A0AEC0] ml-1">
+              <label className="text-[11px] font-black  tracking-widest text-[#4A5568] dark:text-[#A0AEC0] ml-1">
                 Secure Key
               </label>
               <div className="relative group">
@@ -136,7 +136,7 @@ export default function AdminLogin() {
               className="w-full relative group h-14 overflow-hidden rounded-2xl bg-[#1A1D23] dark:bg-white text-white dark:text-[#1A1D23] font-bold shadow-xl transition-all duration-300 disabled:opacity-70"
             >
               <div className="absolute inset-0 w-0 bg-[#C9A961] transition-all duration-500 group-hover:w-full opacity-100" />
-              <span className="relative z-10 flex items-center justify-center gap-3 group-hover:text-white transition-colors duration-300 uppercase tracking-widest text-xs">
+              <span className="relative z-10 flex items-center justify-center gap-3 group-hover:text-white transition-colors duration-300  tracking-widest text-xs">
                 {loading ? (
                   <Loader2 className="animate-spin" />
                 ) : (
@@ -151,7 +151,7 @@ export default function AdminLogin() {
 
           {/* Footer Card */}
           <div className="mt-10 pt-8 border-t border-gray-100 dark:border-gray-800 text-center">
-            <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] italic">
+            <p className="text-[10px] text-gray-400  tracking-[0.2em] italic">
               Access attempts are logged and monitored
             </p>
           </div>
@@ -161,7 +161,7 @@ export default function AdminLogin() {
         <div className="text-center mt-8">
           <button 
             onClick={() => router.push("/")}
-            className="text-xs font-bold text-gray-400 hover:text-[#C9A961] transition-colors uppercase tracking-widest"
+            className="text-xs font-bold text-gray-400 hover:text-[#C9A961] transition-colors  tracking-widest"
           >
             ← Back to Public Site
           </button>

@@ -46,10 +46,10 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,169,97,0.03),transparent_50%)]"></div>
       </div>
 
-      <main className="relative z-10">
+      <main className="relative z-10 pt-3 md:pt-0">
         {/* --- HERO SECTION --- */}
         <section className="relative min-h-[100vh] flex items-center pt-24 pb-16 overflow-hidden">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               {/* Left Content */}
               <motion.div 
@@ -78,7 +78,7 @@ export default function LandingPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-6 text-[#1A1D23] dark:text-white tracking-tight">
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[6.5rem] font-serif leading-[1.1] mb-6 text-[#1A1D23] dark:text-white tracking-tight">
                     Investasi <br />
                     <span className="relative inline-block">
                       <span className="relative z-10 bg-gradient-to-r from-[#C9A961] via-[#D4AF37] to-[#C9A961] bg-clip-text text-transparent italic">
@@ -149,20 +149,31 @@ export default function LandingPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
-                  className="flex items-center justify-center lg:justify-start gap-4 pt-4"
+                  // Menambahkan lg:scale dan lg:origin-left agar membesar ke arah kanan
+                  className="flex items-center justify-center lg:justify-start gap-4 pt-4 lg:pt-6 lg:scale-125 lg:origin-left transition-transform duration-500"
                 >
-                  <div className="flex -space-x-3">
+                  <div className="flex -space-x-3 lg:-space-x-4">
                     {[...Array(4)].map((_, i) => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-white dark:border-[#0A0B0D] bg-gradient-to-br from-[#C9A961] to-[#8B9DC3]"></div>
+                      <div 
+                        key={i} 
+                        // Ukuran default mobile w-10 h-10, desktop w-12 h-12
+                        className="w-10 h-10 lg:w-12 lg:h-12 rounded-full border-2 border-white dark:border-[#0A0B0D] bg-gradient-to-br from-[#C9A961] to-[#8B9DC3] shadow-md"
+                      ></div>
                     ))}
                   </div>
+                  
                   <div className="text-left">
                     <div className="flex items-center gap-1 text-[#C9A961]">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={12} fill="currentColor" />
+                        <Star 
+                          key={i} 
+                          // Ukuran star membesar di desktop
+                          className="w-3 h-3 lg:w-4 lg:h-4" 
+                          fill="currentColor" 
+                        />
                       ))}
                     </div>
-                    <p className="text-xs text-[#4A5568] dark:text-[#A0AEC0]">
+                    <p className="text-xs lg:text-sm text-[#4A5568] dark:text-[#A0AEC0] mt-0.5">
                       <span className="font-bold text-[#1A1D23] dark:text-white">5,000+</span> Pelanggan Puas
                     </p>
                   </div>
@@ -177,9 +188,9 @@ export default function LandingPage() {
                 transition={{ duration: 1, ease: "easeOut" }}
                 className="relative flex justify-center lg:justify-end"
               >
-                <div className="relative w-full max-w-[500px] aspect-[3/4]">
+                <div className="relative w-full max-w-[700px] aspect-[4/4]">
                   {/* Main Image Container */}
-                  <div className="relative w-full h-full rounded-[60px] overflow-hidden shadow-2xl border-8 border-white/50 dark:border-[#1A1D23]/50 backdrop-blur-sm">
+                  <div className="relative w-full h-full rounded-[60px] overflow-hidden shadow-xl border-8 border-white/50 dark:border-[#1A1D23]/50 backdrop-blur-sm">
                     <Image 
                       src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1000&auto=format&fit=crop" 
                       alt="Luxury Gold Jewelry Collection" 
@@ -201,10 +212,10 @@ export default function LandingPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.9 }}
-                    className="absolute -bottom-6 -left-6 sm:left-0 bg-white dark:bg-[#1A1D23] p-6 rounded-3xl shadow-2xl border border-[#C9A961]/20 max-w-[200px]"
+                    className="absolute -bottom-6 -left-6 sm:left-0 bg-white dark:bg-[#1A1D23] p-4 rounded-3xl shadow-2xl border border-[#C9A961]/20 max-w-[200px]"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-gradient-to-br from-[#C9A961]/20 to-[#8B9DC3]/20 rounded-2xl">
+                      <div className="p-2 bg-gradient-to-br from-[#C9A961]/20 to-[#8B9DC3]/20 rounded-2xl">
                         <Award size={28} className="text-[#C9A961]" />
                       </div>
                       <div>
@@ -219,7 +230,7 @@ export default function LandingPage() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 1 }}
-                    className="hidden lg:block absolute -right-8 top-1/3 bg-white dark:bg-[#1A1D23] p-6 rounded-3xl shadow-2xl border border-[#8B9DC3]/20"
+                    className="hidden lg:block absolute -right-8 top-1/3 bg-white dark:bg-[#1A1D23] p-3 rounded-3xl shadow-2xl border border-[#8B9DC3]/20"
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <Users size={24} className="text-[#8B9DC3]" />
@@ -412,7 +423,7 @@ export default function LandingPage() {
                     className="group relative bg-white dark:bg-[#1A1D23] rounded-[40px] overflow-hidden border-2 border-[#E5E7EB] dark:border-[#2D3748] hover:border-[#C9A961] transition-all duration-500 hover:shadow-2xl hover:shadow-[#C9A961]/30 hover:-translate-y-2"
                   >
                     {/* Image Container */}
-                    <div className="relative aspect-[3/4] overflow-hidden">
+                    <div className="relative aspect-[4/4] overflow-hidden">
                       <Image 
                         src={product.image_url} 
                         alt={product.name} 

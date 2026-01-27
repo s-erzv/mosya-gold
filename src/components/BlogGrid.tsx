@@ -8,7 +8,7 @@ export default function BlogGrid({ initialPosts }: { initialPosts: any[] }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Semua");
 
-  // Ambil kategori unik dari database
+  // Ambil kategori unik yang ada di database secara dinamis
   const dynamicCategories = useMemo(() => {
     const allCats = initialPosts.map(p => p.category).filter(Boolean);
     return ["Semua", ...Array.from(new Set(allCats))];
@@ -24,8 +24,8 @@ export default function BlogGrid({ initialPosts }: { initialPosts: any[] }) {
 
   return (
     <section>
-      {/* Search & Category Filter */}
-      <div className="flex flex-col md:flex-row gap-4 mb-16 items-center justify-between sticky top-24 z-30 bg-[#FAFBFC]/80 dark:bg-[#0A0B0D]/80 backdrop-blur-md p-4 rounded-[32px] border border-[#C9A961]/10 shadow-sm">
+      {/* Search & Category Filter Bar */}
+      <div className="flex flex-col md:flex-row gap-4 mb-16 items-center justify-between top-24 z-30 bg-[#FAFBFC]/80 dark:bg-[#0A0B0D]/80 backdrop-blur-md p-4 rounded-[32px] border border-[#C9A961]/10 shadow-sm">
         
         {/* Search Input */}
         <div className="relative w-full md:w-96 group">
@@ -33,13 +33,13 @@ export default function BlogGrid({ initialPosts }: { initialPosts: any[] }) {
           <input
             type="text"
             placeholder="Cari artikel edukasi..."
-            className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white dark:bg-[#1A1D23] border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#C9A961] focus:ring-1 focus:ring-[#C9A961]/20 transition-all text-sm"
+            className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white dark:bg-[#1A1D23] border border-gray-100 dark:border-gray-800 focus:outline-none focus:border-[#C9A961] focus:ring-1 focus:ring-[#C9A961]/20 transition-all text-sm font-medium"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
 
-        {/* Categories */}
+        {/* Categories Tab */}
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
           <SlidersHorizontal size={18} className="text-[#C9A961] shrink-0 mr-2 hidden md:block" />
           {dynamicCategories.map((cat) => (
@@ -59,7 +59,7 @@ export default function BlogGrid({ initialPosts }: { initialPosts: any[] }) {
       </div>
 
       {/* Grid Artikel */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
         <AnimatePresence mode="popLayout">
           {filteredPosts.length > 0 ? (
             filteredPosts.map((post, index) => (

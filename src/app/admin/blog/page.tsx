@@ -53,7 +53,6 @@ export default function BlogManagement() {
 
   return (
     <div className="space-y-8 pb-20">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-3xl font-serif font-bold text-[#1A1D23] dark:text-white tracking-tight">Edukasi & Artikel</h1>
@@ -67,7 +66,6 @@ export default function BlogManagement() {
         </Link>
       </div>
 
-      {/* Search Bar */}
       <div className="relative group">
         <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#C9A961] transition-colors" size={20} />
         <input 
@@ -79,17 +77,15 @@ export default function BlogManagement() {
         />
       </div>
 
-      {/* Blog Grid */}
       {loading ? (
         <div className="py-32 flex flex-col items-center justify-center text-gray-400">
           <Loader2 className="animate-spin mb-4 text-[#C9A961]" size={40} />
-          <p className="font-medium animate-pulse tracking-widest uppercase text-[10px]">Menyusun Arsip...</p>
+          <p className="font-medium animate-pulse tracking-widest  text-[10px]">Menyusun Arsip...</p>
         </div>
       ) : filteredPosts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
             {filteredPosts.map((post, index) => {
-              // Ambil gambar pertama dari blocks jika ada
               let previewImage = "/placeholder-blog.jpg";
               try {
                 const blocks = JSON.parse(post.content);
@@ -107,7 +103,6 @@ export default function BlogManagement() {
                   transition={{ delay: index * 0.05 }}
                   className="bg-white dark:bg-[#111318] rounded-[32px] border border-gray-100 dark:border-gray-800 overflow-hidden group hover:shadow-2xl hover:shadow-[#C9A961]/10 transition-all duration-500 flex flex-col"
                 >
-                  {/* Preview Image */}
                   <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-gray-900">
                     <img 
                       src={previewImage} 
@@ -121,15 +116,14 @@ export default function BlogManagement() {
                     </div>
                   </div>
 
-                  {/* Content */}
                   <div className="p-7 flex-1 flex flex-col">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-[#C9A961]">
+                      <div className="flex items-center gap-1.5 text-[10px] font-black  tracking-widest text-[#C9A961]">
                         <Calendar size={12} />
                         {new Date(post.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
                       </div>
                       <span className="text-gray-300 dark:text-gray-700">•</span>
-                      <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400">
+                      <div className="flex items-center gap-1.5 text-[10px] font-black  tracking-widest text-gray-400">
                         <User size={12} />
                         {post.author || "Admin"}
                       </div>
@@ -154,7 +148,7 @@ export default function BlogManagement() {
                         </button>
                       </div>
                       
-                      <span className="text-[10px] font-black text-gray-300 uppercase tracking-[0.2em]">
+                      <span className="text-[10px] font-black text-gray-300  tracking-[0.2em]">
                         ID: {post.id.substring(0, 5)}
                       </span>
                     </div>

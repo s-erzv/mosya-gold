@@ -85,66 +85,67 @@ export default function AddProductPage() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-6xl mx-auto pb-20"
+      className="max-w-6xl mx-auto pb-20 pt-10 md:pt-0 px-4 md:px-0" // Tambah padding top di mobile
     >
-      {/* Navigation Header */}
-      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      {/* Navigation Header - Sekarang stack ke bawah di mobile */}
+      <div className="mb-12 flex flex-col gap-6 text-left">
         <div>
           <Link 
             href="/admin/products" 
-            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#C9A961] mb-4 hover:gap-3 transition-all"
+            className="inline-flex items-center gap-2 text-xs font-black tracking-widest text-[#C9A961] mb-6 hover:gap-3 transition-all"
           >
             <ArrowLeft size={14} /> Kembali ke Management
           </Link>
-          <h1 className="text-4xl font-serif font-bold text-[#1A1D23] dark:text-white tracking-tight flex items-center gap-4">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-[#1A1D23] dark:text-white tracking-tight">
             Tambah <span className="italic text-[#C9A961]">Koleksi Baru</span>
           </h1>
-          <p className="text-gray-500 text-sm mt-2 max-w-md">
-            Pastikan detail produk yang dimasukkan sudah sesuai dengan sertifikasi keaslian Mosya Gold.
+          <p className="text-gray-500 text-sm mt-3 max-w-2xl leading-relaxed">
+            Pastikan setiap detail produk, mulai dari penamaan hingga deskripsi karat, sudah sesuai dengan standar sertifikasi Mosya Gold untuk menjaga kepercayaan pelanggan.
           </p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      {/* Grid Form - Gunakan items-stretch agar kolom kiri & kanan sama tingginya di desktop */}
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
         
-        {/* Kolom Kiri: Input Detail (Span 7) */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white dark:bg-[#1A1D23] p-8 md:p-10 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 dark:border-gray-800 space-y-8">
+        {/* Kolom Kiri: Detail Produk */}
+        <div className="lg:col-span-7">
+          <div className="h-full bg-white dark:bg-[#1A1D23] p-8 md:p-12 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 dark:border-gray-800 space-y-10 flex flex-col">
             
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2 uppercase">
                 <CheckCircle2 size={12} /> Product Identity
               </label>
               <input 
                 required
-                className="w-full p-5 bg-gray-50 dark:bg-[#111318] border-none rounded-2xl focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all text-sm font-medium"
+                className="w-full p-6 bg-gray-50 dark:bg-[#111318] border-none rounded-[24px] focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all text-base font-medium"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                placeholder="Contoh: Kalung Emas 18K Rose Gold"
+                placeholder="Nama Koleksi..."
               />
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2 uppercase">
                   <CheckCircle2 size={12} /> Valuation (IDR)
                 </label>
                 <input 
                   required
                   type="number"
-                  className="w-full p-5 bg-gray-50 dark:bg-[#111318] border-none rounded-2xl focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all text-sm font-medium"
+                  className="w-full p-6 bg-gray-50 dark:bg-[#111318] border-none rounded-[24px] focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all text-base font-medium"
                   value={formData.price}
                   onChange={(e) => setFormData({...formData, price: e.target.value})}
                   placeholder="0"
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2">
+              <div className="space-y-3">
+                <label className="text-[10px] font-black tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2 uppercase">
                   <CheckCircle2 size={12} /> Classification
                 </label>
                 <select 
-                  className="w-full p-5 bg-gray-50 dark:bg-[#111318] border-none rounded-2xl focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all appearance-none text-sm font-medium"
+                  className="w-full p-6 bg-gray-50 dark:bg-[#111318] border-none rounded-[24px] focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all appearance-none text-base font-medium cursor-pointer"
                   value={formData.category}
                   onChange={(e) => setFormData({...formData, category: e.target.value})}
                 >
@@ -155,83 +156,85 @@ export default function AddProductPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2">
+            <div className="space-y-3 flex-1 flex flex-col">
+              <label className="text-[10px] font-black tracking-[0.2em] text-[#C9A961] ml-1 flex items-center gap-2 uppercase">
                 <CheckCircle2 size={12} /> Craftsmanship Story
               </label>
               <textarea 
-                className="w-full p-5 bg-gray-50 dark:bg-[#111318] border-none rounded-2xl focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all h-48 resize-none text-sm font-medium leading-relaxed"
+                className="flex-1 w-full p-6 bg-gray-50 dark:bg-[#111318] border-none rounded-[24px] focus:ring-2 focus:ring-[#C9A961]/20 focus:bg-white dark:focus:bg-black outline-none transition-all min-h-[250px] resize-none text-base font-medium leading-relaxed"
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
-                placeholder="Jelaskan detail karat, berat gram, dan filosofi desain produk ini..."
+                placeholder="Jelaskan karat, berat, dan detail desain..."
               />
             </div>
           </div>
         </div>
 
-        {/* Kolom Kanan: Media & Action (Span 5) */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white dark:bg-[#1A1D23] p-8 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 dark:border-gray-800">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#C9A961] mb-6 block ml-1 flex items-center gap-2">
+        {/* Kolom Kanan: Media & Action */}
+        <div className="lg:col-span-5 flex flex-col gap-8">
+          <div className="flex-1 bg-white dark:bg-[#1A1D23] p-8 md:p-12 rounded-[40px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 dark:border-gray-800 flex flex-col">
+            <label className="text-[10px] font-black tracking-[0.2em] text-[#C9A961] mb-8 block ml-1 flex items-center gap-2 uppercase">
               <CheckCircle2 size={12} /> Visual Assets
             </label>
             
-            <AnimatePresence mode="wait">
-              {previewUrl ? (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="relative aspect-square rounded-[32px] overflow-hidden border border-gray-100 dark:border-gray-800 group"
-                >
-                  <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button 
-                      type="button"
-                      onClick={() => {setFile(null); setPreviewUrl(null);}}
-                      className="p-4 bg-white text-red-500 rounded-full shadow-2xl hover:scale-110 transition-transform"
-                    >
-                      <X size={24} />
-                    </button>
-                  </div>
-                </motion.div>
-              ) : (
-                <div className="relative group">
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                    onChange={handleFileChange}
-                  />
-                  <div className="aspect-square border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-[32px] flex flex-col items-center justify-center p-8 transition-all group-hover:border-[#C9A961] group-hover:bg-[#C9A961]/5">
-                    <div className="w-20 h-20 bg-gray-50 dark:bg-[#111318] rounded-full flex items-center justify-center text-gray-400 group-hover:text-[#C9A961] group-hover:scale-110 transition-all mb-4">
-                      <Upload size={32} />
+            <div className="flex-1 flex flex-col justify-center">
+              <AnimatePresence mode="wait">
+                {previewUrl ? (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="relative aspect-square rounded-[32px] overflow-hidden border border-gray-100 dark:border-gray-800 group mx-auto w-full max-w-[400px]"
+                  >
+                    <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button 
+                        type="button"
+                        onClick={() => {setFile(null); setPreviewUrl(null);}}
+                        className="p-5 bg-white text-red-500 rounded-full shadow-2xl hover:scale-110 transition-transform"
+                      >
+                        <X size={28} />
+                      </button>
                     </div>
-                    <p className="text-sm font-bold text-gray-700 dark:text-gray-300">Unggah Masterpiece</p>
-                    <p className="text-[10px] text-gray-400 mt-2 text-center uppercase tracking-widest">JPG, PNG up to 5MB</p>
+                  </motion.div>
+                ) : (
+                  <div className="relative group mx-auto w-full max-w-[400px]">
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                      onChange={handleFileChange}
+                    />
+                    <div className="aspect-square border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-[32px] flex flex-col items-center justify-center p-8 transition-all group-hover:border-[#C9A961] group-hover:bg-[#C9A961]/5">
+                      <div className="w-24 h-24 bg-gray-50 dark:bg-[#111318] rounded-full flex items-center justify-center text-gray-400 group-hover:text-[#C9A961] group-hover:scale-110 transition-all mb-6">
+                        <Upload size={40} />
+                      </div>
+                      <p className="text-base font-bold text-gray-700 dark:text-gray-300">Unggah Produk</p>
+                      <p className="text-xs text-gray-400 mt-2 text-center tracking-widest">JPG, PNG up to 5MB</p>
+                    </div>
                   </div>
-                </div>
-              )}
-            </AnimatePresence>
+                )}
+              </AnimatePresence>
+            </div>
 
-            <div className="mt-8 p-4 bg-amber-50 dark:bg-amber-950/20 rounded-2xl border border-amber-100 dark:border-amber-900/30 flex gap-3">
-              <AlertCircle size={18} className="text-amber-600 shrink-0 mt-0.5" />
-              <p className="text-[11px] text-amber-700 dark:text-amber-400 leading-relaxed font-medium">
-                Gambar akan otomatis di-hosting secara publik. Gunakan foto dengan pencahayaan studio untuk hasil terbaik di Katalog.
+            <div className="mt-10 p-5 bg-amber-50 dark:bg-amber-950/20 rounded-3xl border border-amber-100 dark:border-amber-900/30 flex gap-4">
+              <AlertCircle size={20} className="text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed font-medium">
+                Sistem akan memproses gambar secara publik. Gunakan resolusi tinggi untuk Katalog yang lebih menawan.
               </p>
             </div>
           </div>
 
           <motion.button 
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
             disabled={loading || !file}
-            className="w-full h-16 bg-[#1A1D23] dark:bg-white text-white dark:text-[#1A1D23] rounded-2xl font-bold flex justify-center items-center gap-3 shadow-2xl shadow-black/10 disabled:opacity-50 transition-all hover:bg-[#C9A961] hover:text-white"
+            className="w-full h-20 bg-[#1A1D23] dark:bg-white text-white dark:text-[#1A1D23] rounded-[32px] font-black text-sm uppercase tracking-[0.2em] flex justify-center items-center gap-4 shadow-2xl shadow-[#C9A961]/10 disabled:opacity-50 transition-all hover:bg-[#C9A961] hover:text-white"
           >
             {loading ? <Loader2 className="animate-spin" /> : (
               <>
-                Publish to Collection
-                <Plus size={18} />
+                Add to Collection
+                <Plus size={20} />
               </>
             )}
           </motion.button>

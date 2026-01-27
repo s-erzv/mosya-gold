@@ -19,7 +19,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h5 className="font-bold text-xs uppercase tracking-[0.3em] text-zinc-400 mb-8">Panduan Beli</h5>
+            <h5 className="font-bold text-xs  tracking-[0.3em] text-zinc-400 mb-8">Panduan Beli</h5>
             <ul className="space-y-4 text-sm font-medium text-zinc-600 dark:text-zinc-300">
               <li className="hover:text-[#D4AF37] cursor-pointer">Cara Order</li>
               <li className="hover:text-[#D4AF37] cursor-pointer">Verifikasi Pembayaran</li>
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h5 className="font-bold text-xs uppercase tracking-[0.3em] text-zinc-400 mb-8">Kontak Kami</h5>
+            <h5 className="font-bold text-xs  tracking-[0.3em] text-zinc-400 mb-8">Kontak Kami</h5>
             <ul className="space-y-5 text-sm">
               <li className="flex gap-4 text-zinc-600 dark:text-zinc-300"><Phone size={18} className="text-[#D4AF37]"/> +62 821 1234 5678</li>
               <li className="flex gap-4 text-zinc-600 dark:text-zinc-300"><Mail size={18} className="text-[#D4AF37]"/> hello@mosyagold.com</li>
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h5 className="font-bold text-xs uppercase tracking-[0.3em] text-zinc-400 mb-8">Newsletter</h5>
+            <h5 className="font-bold text-xs  tracking-[0.3em] text-zinc-400 mb-8">Newsletter</h5>
             <p className="text-xs text-zinc-500 mb-4">Dapatkan info promo dan update harga emas harian.</p>
             <div className="flex flex-col gap-3">
               <input type="email" placeholder="Email Anda" className="bg-white dark:bg-zinc-800 p-4 rounded-xl text-sm border border-zinc-100 dark:border-zinc-700 outline-none focus:border-[#D4AF37]" />

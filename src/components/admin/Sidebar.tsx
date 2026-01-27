@@ -23,7 +23,7 @@ export default function Sidebar() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push("/admin/login");
+    router.push("/login");
   };
 
   const menuItems = [
@@ -36,17 +36,14 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Top Bar */}
+      {/* Mobile Top Bar - Tetap sama */}
       <div className="lg:hidden bg-white/80 dark:bg-[#0A0B0D]/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 p-4 flex items-center justify-between sticky top-0 z-[60]">
         <div className="flex items-center gap-2 text-[#C9A961]">
           <Diamond size={20} className="fill-[#C9A961]/20" />
           <span className="font-serif font-bold text-[#1A1D23] dark:text-white text-sm">Mosya Admin</span>
         </div>
         <div className="flex items-center gap-2">
-           <button 
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 text-[#C9A961]"
-          >
+           <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-2 text-[#C9A961]">
             {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           <button onClick={() => setIsOpen(true)} className="p-2 text-gray-600 dark:text-gray-400">
@@ -55,12 +52,12 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Desktop Sidebar */}
+      {/* Desktop Sidebar - DIPERBAIKI */}
       <motion.aside 
-        animate={{ width: isCollapsed ? 100 : 280 }}
+        animate={{ width: isCollapsed ? 90 : 280 }}
         className="hidden lg:flex flex-col bg-white dark:bg-[#111318] border-r border-gray-100 dark:border-gray-800 transition-all duration-300 relative z-50 h-screen"
       >
-        <div className="p-8 flex items-center justify-between">
+        <div className={`p-8 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {!isCollapsed ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3">
               <div className="p-2 bg-[#C9A961]/10 rounded-xl">
@@ -69,7 +66,7 @@ export default function Sidebar() {
               <span className="font-serif font-bold text-xl text-[#1A1D23] dark:text-white tracking-tight">Mosya</span>
             </motion.div>
           ) : (
-            <div className="mx-auto p-2 bg-[#C9A961]/10 rounded-xl">
+            <div className="p-2 bg-[#C9A961]/10 rounded-xl">
               <Diamond className="text-[#C9A961]" size={24} />
             </div>
           )}
@@ -82,16 +79,19 @@ export default function Sidebar() {
               <Link 
                 key={item.href} 
                 href={item.href} 
-                className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group ${
+                className={`flex items-center transition-all relative group h-12 rounded-2xl ${
+                  isCollapsed ? "justify-center px-0" : "justify-start px-4 gap-4"
+                } ${
                   isActive 
                   ? "bg-[#C9A961] text-white shadow-lg shadow-[#C9A961]/20" 
                   : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#C9A961]"
                 }`}
               >
-                <div className="shrink-0">{item.icon}</div>
-                {!isCollapsed && <span className="text-sm font-bold tracking-wide">{item.name}</span>}
+                <div className="shrink-0 flex items-center justify-center">{item.icon}</div>
+                {!isCollapsed && <span className="text-sm font-bold tracking-wide truncate">{item.name}</span>}
+                
                 {isCollapsed && (
-                  <div className="absolute left-20 bg-[#1A1D23] text-white text-[10px] px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
+                  <div className="absolute left-16 bg-[#1A1D23] text-white text-[10px] px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
                     {item.name}
                   </div>
                 )}
@@ -100,22 +100,25 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="p-6 space-y-4">
-          {/* Theme Toggle Button */}
+        <div className="p-4 space-y-4">
           <button 
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="flex items-center gap-4 px-4 py-3 w-full bg-gray-50 dark:bg-[#1A1D23] text-[#C9A961] rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-[#C9A961] transition-all"
+            className={`flex items-center w-full bg-gray-50 dark:bg-[#1A1D23] text-[#C9A961] rounded-2xl border border-gray-100 dark:border-gray-800 hover:border-[#C9A961] transition-all h-12 ${
+               isCollapsed ? "justify-center px-0" : "px-4 gap-4"
+            }`}
           >
-            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
-            {!isCollapsed && <span className="text-xs font-bold uppercase tracking-widest">{theme === "dark" ? "Mode Terang" : "Mode Gelap"}</span>}
+            <div className="shrink-0">{theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}</div>
+            {!isCollapsed && <span className="text-xs font-bold tracking-widest truncate">{theme === "dark" ? "Light" : "Dark"}</span>}
           </button>
 
           <button 
             onClick={handleLogout} 
-            className="flex items-center gap-4 px-4 py-3 w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl transition-colors font-bold text-sm"
+            className={`flex items-center w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-2xl transition-colors font-bold text-sm h-12 ${
+               isCollapsed ? "justify-center px-0" : "px-4 gap-4"
+            }`}
           >
-            <LogOut size={20} />
-            {!isCollapsed && <span>Logout</span>}
+            <div className="shrink-0"><LogOut size={20} /></div>
+            {!isCollapsed && <span className="truncate">Logout</span>}
           </button>
 
           <button 
@@ -127,7 +130,7 @@ export default function Sidebar() {
         </div>
       </motion.aside>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Tetap sama */}
       <AnimatePresence>
         {isOpen && (
           <>
