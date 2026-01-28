@@ -29,9 +29,10 @@ export default function AdminLogin() {
 
       if (error) throw error;
 
-      if (data.user) {
-        window.location.href = "/admin/dashboard"; 
-      }
+    if (data.user) {
+      router.refresh(); 
+      router.push("/admin/dashboard");
+    }
     } catch (error: any) {
       alert("Akses Ditolak: " + error.message);
     } finally {
