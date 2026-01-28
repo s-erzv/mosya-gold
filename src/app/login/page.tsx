@@ -30,7 +30,7 @@ export default function AdminLogin() {
       if (error) throw error;
 
       if (data.user) {
-        router.push("/admin/dashboard");
+        window.location.href = "/admin/dashboard"; 
       }
     } catch (error: any) {
       alert("Akses Ditolak: " + error.message);
