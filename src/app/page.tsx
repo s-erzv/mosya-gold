@@ -13,6 +13,7 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloating from "@/components/WhatsAppFloating";
+import GoldPriceSection from "@/components/GoldPriceSection";
 
 export default function LandingPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -367,6 +368,10 @@ export default function LandingPage() {
               </div>
             </motion.div>
           </div>
+        </section>
+
+        <section>
+          <GoldPriceSection />
         </section>
 
         {/* --- FEATURED PRODUCTS --- */}

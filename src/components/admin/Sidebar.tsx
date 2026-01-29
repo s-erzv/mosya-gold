@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { 
   LayoutDashboard, Package, BookOpen, LogOut, 
   Menu, X, Diamond, ChevronLeft, ChevronRight,
-  Sun, Moon
+  Sun, Moon, TrendingUp
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useTheme } from "next-themes";
@@ -30,6 +30,7 @@ export default function Sidebar() {
     { name: "Dashboard", href: "/admin/dashboard", icon: <LayoutDashboard size={20} /> },
     { name: "Produk Emas", href: "/admin/products", icon: <Package size={20} /> },
     { name: "Blog / Artikel", href: "/admin/blog", icon: <BookOpen size={20} /> },
+    { name: "Margin Harga", href: "/admin/gold-price", icon: <TrendingUp size={20} /> },
   ];
 
   if (!mounted) return null;
