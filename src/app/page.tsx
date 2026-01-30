@@ -14,6 +14,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloating from "@/components/WhatsAppFloating";
 import GoldPriceSection from "@/components/GoldPriceSection";
+import GoldGramGrid from "@/components/GoldCalculatorTable";
+import GoldInteractiveSection from "@/components/GoldInteractiveSection";
 
 export default function LandingPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -371,8 +373,17 @@ export default function LandingPage() {
         </section>
 
         <section>
+          <GoldInteractiveSection />
+        </section>
+
+        {/* <section>
           <GoldPriceSection />
         </section>
+
+        <section>
+          <GoldGramGrid />
+        </section> */}
+
 
         {/* --- FEATURED PRODUCTS --- */}
         <section className="py-20 sm:py-24 bg-[#FAFBFC] dark:bg-[#0A0B0D] relative overflow-hidden">
