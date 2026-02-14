@@ -9,13 +9,17 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mosya Gold | Investasi Emas & Perhiasan Eksklusif",
+  title: "Mosya Gold | Niaga Emas Syariah",
   description: "Pusat investasi emas murni dan perhiasan custom elegan dengan standar syariah.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // suppressHydrationWarning wajib ada di <html> untuk next-themes
     <html lang="id" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${playfair.variable} antialiased font-sans transition-colors duration-500`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>

@@ -1,53 +1,92 @@
-import { Diamond, Instagram, Facebook, Twitter, Phone, Mail, MapPin } from "lucide-react";
+"use client";
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Instagram, Facebook, Twitter, Phone, Mail, MapPin, Send } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-zinc-50 dark:bg-zinc-900/50 pt-24 pb-12 border-t border-zinc-100 dark:border-zinc-800">
-      <div className="container mx-auto px-6">
+    <footer className="bg-white dark:bg-[#0A0B0D] pt-24 pb-12 border-t border-zinc-100 dark:border-zinc-800 relative overflow-hidden">
+      {/* Dekorasi Background Halus */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A961]/20 to-transparent"></div>
+      
+      <div className="container mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
+          
+          {/* Brand Identity */}
           <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center gap-2 mb-8">
-              <Diamond className="text-[#D4AF37]" size={32} />
-              <span className="font-serif font-bold text-2xl tracking-tighter">MOSYAGOLD</span>
+            <div className="flex items-center gap-3 mb-8">
+              {/* Menggunakan logo.png sesuai permintaan */}
+              <div className="relative w-10 h-10">
+                <Image 
+                  src="/logo.png" 
+                  alt="Mosya Gold Logo" 
+                  fill 
+                  className="object-contain"
+                />
+              </div>
+              <span className="font-serif font-bold text-2xl tracking-tighter dark:text-white">
+                MOSYA<span className="text-[#C9A961]">GOLD</span>
+              </span>
             </div>
-            <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed mb-8">Destinasi terpercaya untuk investasi emas dan koleksi perhiasan mewah dengan standar kemurnian tertinggi.</p>
-            <div className="flex gap-5">
-              <Instagram className="text-zinc-400 hover:text-[#D4AF37] cursor-pointer transition-colors" />
-              <Facebook className="text-zinc-400 hover:text-[#D4AF37] cursor-pointer transition-colors" />
-              <Twitter className="text-zinc-400 hover:text-[#D4AF37] cursor-pointer transition-colors" />
+            <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed mb-8">
+              Solusi cerdas investasi emas dan koleksi perhiasan murni 99.9% dengan layanan antar-jemput (COD) se-Jabodetabek.
+            </p>
+            <div className="flex gap-4">
+              <a href="https://instagram.com/mosyagold" target="_blank" className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:bg-[#E1306C] hover:text-white transition-all duration-300">
+                <Instagram size={18} />
+              </a>
+              <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:bg-[#1877F2] hover:text-white transition-all duration-300 cursor-pointer">
+                <Facebook size={18} />
+              </div>
+              <div className="w-10 h-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 hover:bg-[#1DA1F2] hover:text-white transition-all duration-300 cursor-pointer">
+                <Twitter size={18} />
+              </div>
             </div>
           </div>
 
           <div>
-            <h5 className="font-bold text-xs  tracking-[0.3em] text-zinc-400 mb-8">Panduan Beli</h5>
+            <h5 className="font-bold text-[10px] tracking-[0.3em] text-[#C9A961] mb-8">Layanan Kami</h5>
             <ul className="space-y-4 text-sm font-medium text-zinc-600 dark:text-zinc-300">
-              <li className="hover:text-[#D4AF37] cursor-pointer">Cara Order</li>
-              <li className="hover:text-[#D4AF37] cursor-pointer">Verifikasi Pembayaran</li>
-              <li className="hover:text-[#D4AF37] cursor-pointer">Layanan Pengiriman</li>
-              <li className="hover:text-[#D4AF37] cursor-pointer">Kebijakan Buyback</li>
+              <li className="hover:text-[#C9A961] transition-colors cursor-pointer">Beli Emas Online</li>
+              <li className="hover:text-[#C9A961] transition-colors cursor-pointer">Jual Kembali (Buyback)</li>
+              <li className="hover:text-[#C9A961] transition-colors cursor-pointer">Tabungan Gotong Royong</li>
+              <li className="hover:text-[#C9A961] transition-colors cursor-pointer">Layanan COD</li>
             </ul>
           </div>
 
           <div>
-            <h5 className="font-bold text-xs  tracking-[0.3em] text-zinc-400 mb-8">Kontak Kami</h5>
+            <h5 className="font-bold text-[10px] tracking-[0.3em] text-[#C9A961] mb-8">Kontak & Lokasi</h5>
             <ul className="space-y-5 text-sm">
-              <li className="flex gap-4 text-zinc-600 dark:text-zinc-300"><Phone size={18} className="text-[#D4AF37]"/> +62 821 1234 5678</li>
-              <li className="flex gap-4 text-zinc-600 dark:text-zinc-300"><Mail size={18} className="text-[#D4AF37]"/> hello@mosyagold.com</li>
-              <li className="flex gap-4 text-zinc-600 dark:text-zinc-300 leading-relaxed"><MapPin size={18} className="text-[#D4AF37]"/> Jakarta Selatan, DKI Jakarta</li>
+              <li className="flex gap-4 text-zinc-600 dark:text-zinc-300 items-center group">
+                <div className="p-2 bg-[#C9A961]/10 rounded-lg text-[#C9A961] group-hover:bg-[#C9A961] group-hover:text-white transition-all">
+                  <Phone size={16}/>
+                </div>
+                <span className="font-serif font-bold tracking-tight text-base">0822-2655-5028</span>
+              </li>
+              <li className="flex gap-4 text-zinc-600 dark:text-zinc-300 items-center group">
+                <div className="p-2 bg-[#C9A961]/10 rounded-lg text-[#C9A961] group-hover:bg-[#C9A961] group-hover:text-white transition-all">
+                  <Mail size={16}/>
+                </div>
+                Hellomosyagold@gmail.com
+              </li>
+              <li className="flex gap-4 text-zinc-600 dark:text-zinc-300 leading-relaxed items-start group">
+                <div className="p-2 bg-[#C9A961]/10 rounded-lg text-[#C9A961] group-hover:bg-[#C9A961] group-hover:text-white transition-all mt-1">
+                  <MapPin size={16}/>
+                </div>
+                Depok, Jawa Barat<br/>
+                (Siap COD se-Jabodetabek)
+              </li>
             </ul>
           </div>
 
-          <div>
-            <h5 className="font-bold text-xs  tracking-[0.3em] text-zinc-400 mb-8">Newsletter</h5>
-            <p className="text-xs text-zinc-500 mb-4">Dapatkan info promo dan update harga emas harian.</p>
-            <div className="flex flex-col gap-3">
-              <input type="email" placeholder="Email Anda" className="bg-white dark:bg-zinc-800 p-4 rounded-xl text-sm border border-zinc-100 dark:border-zinc-700 outline-none focus:border-[#D4AF37]" />
-              <button className="bg-[#D4AF37] text-white p-4 rounded-xl font-bold text-sm">Berlangganan</button>
-            </div>
-          </div>
+          
         </div>
-        <div className="pt-12 border-t border-zinc-100 dark:border-zinc-800 text-center text-sm font-medium text-zinc-400 ">
-          &copy; {new Date().getFullYear()} Mosya Gold Indonesia. Elegant Investment.
+
+        <div className="pt-12 border-t border-zinc-100 dark:border-zinc-800 text-center items-center gap-4 text-xs font-medium text-zinc-400 tracking-widest">
+          <div>
+            &copy; {new Date().getFullYear()} Mosya Gold Indonesia. Elegant Investment.
+          </div>
         </div>
       </div>
     </footer>

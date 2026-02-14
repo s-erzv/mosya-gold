@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, Moon, Sun, ShoppingBag } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 export default function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -38,9 +39,18 @@ export default function Navbar() {
     { name: "Beranda", href: "/" },
     { name: "Katalog", href: "/katalog" },
     { name: "Blog", href: "/blog" },
+    { name: "Harga Emas", href: "/#gold-interactive-section" }, // Added Gold Price Link
+    { name: "Buyback", href: "/#buyback-section" },
+    { name: "Gotong Royong", href: "/#gotong-royong-section" },
   ];
 
   const isActive = (href: string) => {
+    const isAnchorLink = href.includes("#");
+    if (isAnchorLink) {
+      const [linkPath, linkHash] = href.split("#");
+      return pathname === (linkPath || "/") && window.location.hash === `#${linkHash}`;
+    }
+    // For regular links
     if (href === "/" && pathname === "/") return true;
     if (href !== "/" && pathname.startsWith(href)) return true;
     return false;
@@ -59,22 +69,26 @@ export default function Navbar() {
               : "bg-white/10 dark:bg-black/10 backdrop-blur-md py-4 border-white/10"
           }`}
         >
-          <div className="px-6 sm:px-8 lg:px-10">
+          <div className="px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
-              {/* Logo Area - Gedein dikit fontnya */}
-              <Link href="/" className="flex items-center gap-2 group z-[70]">
-                <span className="font-serif font-black text-2xl sm:text-3xl tracking-tighter text-[#1A1D23] dark:text-white transition-transform group-hover:scale-105">
-                  Mosya <span className="bg-gradient-to-r from-[#C9A961] to-[#D4AF37] bg-clip-text text-transparent">Gold</span>
-                </span>
+              <Link href="/" className="flex items-center group z-[70] -ml-2">
+                <div className="relative w-36 h-12 sm:w-48 sm:h-16 transition-transform group-hover:scale-105">
+                  <Image
+                    src="/logo.png"
+                    alt="Mosya Gold Logo"
+                    fill
+                    className="object-contain object-left"
+                    priority
+                  />
+                </div>
               </Link>
 
-              {/* Desktop Navigation - Whitespace lebih rapat, Font lebih gede */}
-              <div className="hidden lg:flex items-center gap-2">
+              <div className="hidden lg:flex items-center gap-1">
                 {navLinks.map((link) => (
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`relative px-6 py-3 text-base font-bold transition-all duration-300 rounded-2xl group ${
+                    className={`relative px-5 py-2.5 text-base font-bold transition-all duration-300 rounded-2xl group ${
                       isActive(link.href)
                         ? "text-[#C9A961]"
                         : "text-[#4A5568] dark:text-[#A0AEC0] hover:text-[#1A1D23] dark:hover:text-white"
@@ -92,7 +106,6 @@ export default function Navbar() {
                 ))}
               </div>
 
-              {/* Right Side Actions */}
               <div className="hidden lg:flex items-center gap-4">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
@@ -126,11 +139,10 @@ export default function Navbar() {
                 </Link>
               </div>
 
-              {/* Mobile Menu Toggle */}
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-3 text-[#1A1D23] dark:text-white z-[70]"
+                className="lg:hidden p-3 text-[#1A1D23] dark:text-white z-[70] -mr-2"
               >
                 {isOpen ? <X size={32} /> : <Menu size={32} />}
               </motion.button>
@@ -139,7 +151,6 @@ export default function Navbar() {
         </motion.nav>
       </div>
 
-      {/* Mobile Menu Overlay - Desain tetap konsisten */}
       <AnimatePresence>
         {isOpen && (
           <>
