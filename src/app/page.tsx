@@ -6,7 +6,6 @@ import { fetchGoldPriceData } from "@/lib/gold";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloating from "@/components/WhatsAppFloating";
-import GoldGramGrid from "@/components/GoldCalculatorTable";
 import GoldInteractiveSection from "@/components/GoldInteractiveSection";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { WhyMosyaGoldSection } from "@/components/landing/WhyMosyaGoldSection";
@@ -50,10 +49,6 @@ export default function LandingPage() {
 
         <ServiceBuybackSection />
 
-
-        {/* <section>
-          <GoldGramGrid />
-        </section> */}
 
         <FeaturedProductsSection />
 
