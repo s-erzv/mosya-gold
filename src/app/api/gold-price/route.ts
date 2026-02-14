@@ -12,29 +12,26 @@ export async function GET() {
       headers: {
         'X-API-Key': EMAS_API_KEY || '',
         'Accept': 'application/json',
-        // MENYAMAR JADI BROWSER (User-Agent)
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://www.google.com/',
       },
       next: { revalidate: 3600 } 
     });
 
-    // Kalau Cloudflare masih nge-block (403), kita kasih harga cadangan biar web gak mati
+    // Jika kena blokir (403/503), kembalikan harga 0
     if (res.status === 403 || res.status === 503) {
-       console.error("Cloudflare Block Detected. Using fallback price.");
        return NextResponse.json({
-         status: 'success', // Kita bohongin dikit biar lib/gold gak error
-         data: [{ sell_price: 1450000 }] // Harga perkiraan kasar
+         status: 'success', 
+         data: [{ sell_price: 0 }] 
        });
     }
 
     const data = await res.json();
     return NextResponse.json(data);
   } catch (error: any) {
-    // FALLBACK TERAKHIR: Biar user tetep liat harga meskipun API mati total
+    // Jika API mati total, kembalikan harga 0
     return NextResponse.json({ 
       status: 'success', 
-      data: [{ sell_price: 1450000 }] 
+      data: [{ sell_price: 0 }] 
     });
   }
 }

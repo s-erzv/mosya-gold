@@ -222,7 +222,7 @@ export default function GoldInteractiveSection() {
                   <div className="p-6 bg-[#C9A961] rounded-[24px] text-white shadow-lg shadow-[#C9A961]/20">
                     <p className="text-[9px] font-bold tracking-widest opacity-80 mb-1 uppercase text-white/90">Total Pembelian (Customer Beli)</p>
                     <p className="text-2xl md:text-3xl font-serif font-semibold mb-4">
-                      {sellPrice > 0 ? formatIDR(sellPrice) : "Pilih berat..."}
+                      {sellPrice > 0 ? formatIDR(sellPrice) : "Harga belum tersedia / Hubungi Admin"}
                     </p>
                     <button className="w-full py-4 bg-white text-[#C9A961] rounded-xl flex items-center justify-center gap-2 font-bold text-[10px] tracking-widest hover:bg-gray-50 transition-all shadow-md uppercase">
                       <ShoppingBag size={14} /> Hubungi Admin
