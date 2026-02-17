@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const EMAS_API_KEY = process.env.NEXT_PUBLIC_EMAS_API_KEY;
+  const EMAS_API_KEY = process.env.EMAS_API_KEY;
   const BASE_URL = 'https://emas.maulanar.my.id/api/prices?brand[eq]=ANTAM&weight[eq]=1';
 
   try {
