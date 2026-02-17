@@ -1,4 +1,3 @@
-// src/app/api/gold-price/route.ts
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -9,29 +8,30 @@ export async function GET() {
 
   try {
     const res = await fetch(BASE_URL, {
+      method: 'GET',
       headers: {
         'X-API-Key': EMAS_API_KEY || '',
         'Accept': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       },
-      next: { revalidate: 3600 } 
+      next: { revalidate: 0 } 
     });
 
-    // Jika kena blokir (403/503), kembalikan harga 0
-    if (res.status === 403 || res.status === 503) {
-       return NextResponse.json({
-         status: 'success', 
-         data: [{ sell_price: 0 }] 
-       });
+    if (!res.ok) {
+      const errorData = await res.text();
+      return NextResponse.json({ 
+        status: 'error', 
+        message: `API Maulana Error: ${res.status}`,
+        debug: errorData.substring(0, 100)
+      }, { status: res.status });
     }
 
     const data = await res.json();
     return NextResponse.json(data);
+
   } catch (error: any) {
-    // Jika API mati total, kembalikan harga 0
     return NextResponse.json({ 
-      status: 'success', 
-      data: [{ sell_price: 0 }] 
-    });
+      status: 'error', 
+      message: error.message 
+    }, { status: 500 });
   }
 }
