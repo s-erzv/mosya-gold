@@ -1,72 +1,67 @@
-// src/lib/gold.ts
 import { supabase } from './supabase';
 
 export const fetchGoldPriceData = async () => {
   try {
-    const { data: mosyaSettings } = await supabase
-      .from('gold_settings')
-      .select('*')
-      .eq('gold_type', 'Mosya Gold')
-      .single();
-    
+    // 1. Ambil SEMUA settings (Redmark & Retro) dari Supabase
     const { data: allSettings } = await supabase.from('gold_settings').select('*');
 
-    const isServer = typeof window === 'undefined';
-    let apiUrl = '/api/gold-price';
-
-    if (isServer) {
-      const host = (process.env.NEXT_PUBLIC_SITE_URL || 'localhost:3000')
-        .replace(/^https?:\/\//, '');
-      const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-      apiUrl = `${protocol}://${host}/api/gold-price`;
+    // 2. Fetch data harga live dari API Maulana (lewat route internal kita)
+    let result;
+    try {
+      const baseUrl = typeof window !== 'undefined' 
+        ? '' 
+        : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+        
+      const res = await fetch(`${baseUrl}/api/gold-price`, { cache: 'no-store' });
+      result = await res.json();
+    } catch (e) {
+      result = { status: 'error', data: [] };
     }
 
-    const res = await fetch(apiUrl, { cache: 'no-store', signal: AbortSignal.timeout(10000) });
-    const result = await res.json();
+    const marketData = result.data || [];
 
-    // Default 0 kalau gagal
-    let marketPrice = 0; 
+    // 3. Fungsi Helper untuk hitung harga jual Mosya berdasarkan tipe profit
+    const calculateFinalPrice = (gram: number, baseMarketPrice: number, setting: any) => {
+      if (!baseMarketPrice || !setting) return 0;
+      
+      const baseValue = baseMarketPrice * gram;
+      let profit = 0;
 
-    if (result.status === 'success' && result.data && result.data.length > 0) {
-      marketPrice = Number(result.data[0].sell_price || 0);
-    }
+      if (setting.profit_type === 'percentage') {
+        const percentage = Number(setting.percentage_margins?.[gram.toString()] || 0);
+        profit = baseValue * (percentage / 100);
+      } else {
+        profit = Number(setting.weight_margins?.[gram.toString()] || 0);
+      }
+
+      return Math.round(baseValue + profit);
+    };
+
+    // 4. Proses data untuk tiap gramasi (Default untuk Tab 1 / Antam Redmark)
+    const redmarkSetting = allSettings?.find(s => s.gold_type === 'Antam Redmark');
+    const antamMarket = marketData.find((d: any) => d.brand.toUpperCase() === 'ANTAM');
+    const marketPrice = Number(antamMarket?.sell_price || 0);
 
     const denominations = [0.5, 1, 2, 3, 5, 10, 25, 50, 100];
-    const weightMargins = mosyaSettings?.weight_margins || {};
-
-    const processedPrices = denominations.map(gram => {
-      // Jika marketPrice 0, hasil akhir harus tetap informatif (hanya untung atau 0)
-      // Tapi mending kita bikin 0 semua kalau marketPrice-nya 0
-      const baseValue = Number(marketPrice) * Number(gram);
-      const profit = Number(weightMargins[gram.toString()] || 0);
-      
-      const isAvailable = marketPrice > 0;
-
-      return {
-        type: `${gram} Gram`,
-        sell_price: isAvailable ? Math.round(baseValue + profit) : 0,
-        buy_price: isAvailable ? Math.round((Number(marketPrice) - 200000) * Number(gram)) : 0
-      };
-    });
+    
+    // processedPrices ini sebagai fallback/default view
+    const processedPrices = denominations.map(gram => ({
+      type: `${gram} Gram`,
+      sell_price: calculateFinalPrice(gram, marketPrice, redmarkSetting),
+      buy_price: marketPrice > 0 ? Math.round((marketPrice - 200000) * gram) : 0
+    }));
 
     return { 
-      marketPrice: Number(marketPrice), 
-      weightMargins: weightMargins, 
-      settings: allSettings || [],
-      processedPrices: processedPrices
+      marketPrice, 
+      settings: allSettings || [], // Ini penting untuk diproses di komponen
+      processedPrices,
+      rawMarketData: marketData,
+      // Kita tambahkan helper function ini supaya bisa dipanggil di UI
+      calculateFinalPrice 
     };
 
   } catch (err) {
-    console.error("Gagal Fetch Harga:", err);
-    return {
-      marketPrice: 0,
-      weightMargins: {},
-      settings: [],
-      processedPrices: [0.5, 1, 2, 3, 5, 10, 25, 50, 100].map(g => ({
-        type: `${g} Gram`,
-        sell_price: 0,
-        buy_price: 0
-      }))
-    };
+    console.error("Gold Fetch Error:", err);
+    return { marketPrice: 0, settings: [], processedPrices: [], rawMarketData: [] };
   }
 };

@@ -20,7 +20,7 @@ export const WhyMosyaGoldSection: React.FC = () => {
             <ShieldCheck size={16} className="text-[#C9A961]" />
             <span className="text-xs font-bold tracking-widest text-[#C9A961]">MENGAPA PILIH KAMI?</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-serif font-bold text-[#1A1D23] dark:text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#1A1D23] dark:text-white">
             Solusi Jual Beli Emas Terpercaya
           </h2>
         </motion.div>
@@ -95,10 +95,10 @@ export const WhyMosyaGoldSection: React.FC = () => {
               { value: "24/7", label: "Bantuan Konsultasi" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <p className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-[#C9A961] to-[#8B9DC3] bg-clip-text text-transparent mb-2">
+                <p className="text-sm sm:text-3xl md:text-5xl font-bold bg-gradient-to-r from-[#C9A961] to-[#8B9DC3] bg-clip-text text-transparent mb-2">
                   {stat.value}
                 </p>
-                <p className="text-sm text-[#4A5568] dark:text-[#A0AEC0] font-medium uppercase tracking-widest">{stat.label}</p>
+                <p className="text-xs text-[#4A5568] dark:text-[#A0AEC0] font-medium uppercase tracking-widest">{stat.label}</p>
               </div>
             ))}
           </div>
