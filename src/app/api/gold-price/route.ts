@@ -13,57 +13,72 @@ export async function GET() {
   const BASE_URL = 'https://emas.maulanar.my.id/api/prices?weight[eq]=1';
 
   try {
-    // Debugging: Cek apakah key terbaca oleh server
-    if (!EMAS_API_KEY) {
-      console.error("ERROR: EMAS_API_KEY is not defined in environment variables.");
-    }
-
     const res = await fetch(BASE_URL, {
       method: 'GET',
       headers: {
-        // Coba kirim kedua jenis header jika ragu mana yang benar
         'X-API-Key': EMAS_API_KEY || '',
-        'Authorization': `Bearer ${EMAS_API_KEY}`, 
         'Accept': 'application/json',
       },
-      next: { revalidate: 0 } 
+      next: { revalidate: 7200 }
     });
 
     if (!res.ok) {
-      const errorText = await res.text();
-      // Ini akan membantu kamu melihat alasan "Unauthorized" (key salah, expired, atau salah header)
-      console.error(`Fetch failed: ${res.status} - ${errorText}`);
-      
-      return NextResponse.json({ 
-        status: 'error', 
-        message: `API Luar Error (${res.status})`,
-        details: errorText // Cek pesan ini di browser/console
-      }, { status: res.status });
+      return NextResponse.json({ status: 'error', message: 'API Maulana Error' }, { status: res.status });
     }
 
     const json = await res.json();
-    
-    if (!json.data) {
-       return NextResponse.json({ status: 'error', message: 'Data empty from API' }, { status: 500 });
-    }
+    if (!json.data) return NextResponse.json({ status: 'error', message: 'No data' }, { status: 500 });
 
-    // --- LOGIC SUPABASE ---
-    const antamMarket = json.data.find((d: any) => d.brand.toUpperCase() === 'ANTAM');
-    if (antamMarket) {
-      await supabaseAdmin.from('gold_price_history').insert([{
-        gold_type: 'Antam',
-        buy_price: Number(antamMarket.buy_price || 0),
-        sell_price: Number(antamMarket.sell_price || 0),
-        recorded_at: new Date().toISOString()
-      }]);
-    }
-
-    const allowedBrands = ['ANTAM', 'ANTAM MULIA RETRO', 'GALERI 24', 'EMASKU', 'UBS'];
+    const monitoredBrands = ['ANTAM', 'ANTAM MULIA RETRO', 'GALERI 24', 'EMASKU', 'UBS'];
     const filteredData = json.data.filter((item: any) => 
-      allowedBrands.includes(item.brand.toUpperCase())
+      monitoredBrands.includes(item.brand.toUpperCase())
     );
 
-    return NextResponse.json({ status: 'success', data: filteredData });
+    const { data: lastHistory } = await supabaseAdmin
+      .from('gold_price_history')
+      .select('recorded_at')
+      .order('recorded_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const now = new Date();
+    const twoHoursAgo = new Date(now.getTime() - (2 * 60 * 60 * 1000));
+
+    const isReadyToSave = !lastHistory || new Date(lastHistory.recorded_at) < twoHoursAgo;
+
+    if (isReadyToSave) {
+      console.log("Saving history to DB (2-hour cycle)...");
+      
+      const historyToInsert = [];
+
+      for (const item of filteredData) {
+        const { data: prevPrice } = await supabaseAdmin
+          .from('gold_price_history')
+          .select('sell_price')
+          .eq('gold_type', item.brand)
+          .order('recorded_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (!prevPrice || Number(prevPrice.sell_price) !== Number(item.sell_price)) {
+          historyToInsert.push({
+            gold_type: item.brand,
+            buy_price: Number(item.buyback_price || item.buy_price || 0),
+            sell_price: Number(item.sell_price || 0),
+            recorded_at: now.toISOString()
+          });
+        }
+      }
+
+      if (historyToInsert.length > 0) {
+        await supabaseAdmin.from('gold_price_history').insert(historyToInsert);
+      }
+    }
+
+    return NextResponse.json({
+      status: 'success',
+      data: filteredData
+    });
 
   } catch (error: any) {
     return NextResponse.json({ status: 'error', message: error.message }, { status: 500 });

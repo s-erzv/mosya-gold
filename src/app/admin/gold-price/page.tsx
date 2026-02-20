@@ -1,11 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { Save, Zap, Settings2, Gem } from "lucide-react";
+import { Save, Zap, Settings2, Gem, Percent, Banknote } from "lucide-react";
 
 export default function GoldPriceSettings() {
-  const [activeGoldType, setActiveGoldType] = useState<string>("Antam Redmark");
+  const [activeGoldType, setActiveGoldType] = useState<string>("Antam Certicard");
   const [settingsId, setSettingsId] = useState<string>("");
   const [margins, setMargins] = useState<any>({}); 
   const [percentageMargins, setPercentageMargins] = useState<any>({}); 
@@ -14,12 +14,13 @@ export default function GoldPriceSettings() {
   const [profitType, setProfitType] = useState<"fixed" | "percentage">("fixed");
   const [loading, setLoading] = useState(true);
 
-  const goldTypes = ["Antam Redmark", "Antam Retro"];
+  // Update daftar tipe emas sesuai branding baru
+  const goldTypes = ["Antam Certicard", "Antam Retro"];
   const denominations = [0.5, 1, 2, 3, 5, 10, 25, 50, 100];
 
   useEffect(() => {
     fetchSettings();
-  }, [activeGoldType]); // Fetch ulang setiap ganti jenis emas
+  }, [activeGoldType]);
 
   async function fetchSettings() {
     setLoading(true);
@@ -33,7 +34,6 @@ export default function GoldPriceSettings() {
       setSettingsId(data.id);
       setProfitType(data.profit_type || "fixed");
 
-      // Fixed Margins
       const initialFixed: any = {};
       const existingMargins = data.weight_margins || {};
       denominations.forEach(g => {
@@ -41,7 +41,6 @@ export default function GoldPriceSettings() {
       });
       setMargins(initialFixed);
 
-      // Percentage Margins
       const initialPercentage: any = {};
       const existingPercentage = data.percentage_margins || {};
       denominations.forEach(g => {
@@ -49,7 +48,6 @@ export default function GoldPriceSettings() {
       });
       setPercentageMargins(initialPercentage);
     } else {
-      // Jika belum ada row di DB, reset view
       setSettingsId("");
       setMargins({});
       setPercentageMargins({});
@@ -88,7 +86,7 @@ export default function GoldPriceSettings() {
       .eq('gold_type', activeGoldType);
 
     if (!error) {
-      alert(`Profit ${activeGoldType} berhasil disimpan!`);
+      alert(`Margin ${activeGoldType} berhasil diperbarui! ✨`);
     } else {
       alert("Gagal menyimpan: " + error.message);
     }
@@ -96,25 +94,31 @@ export default function GoldPriceSettings() {
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto mb-20">
+    <div className="p-4 md:p-8 max-w-5xl mx-auto mb-20 min-h-screen">
       <header className="mb-10 text-center md:text-left">
         <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-          <Settings2 className="text-[#C9A961]" />
-          <h1 className="text-3xl font-serif font-bold dark:text-white text-zinc-800">Margin Manager</h1>
+          <div className="p-2 bg-[#C9A961]/10 rounded-xl text-[#C9A961]">
+            <Settings2 size={24} />
+          </div>
+          <h1 className="text-3xl font-serif font-bold dark:text-white text-zinc-800 tracking-tight">
+            Margin <span className="text-[#C9A961]">Manager</span>
+          </h1>
         </div>
-        <p className="text-gray-500 text-sm italic">Sesuaikan keuntungan Mosya Gold berdasarkan jenis dan gramasi.</p>
+        <p className="text-gray-500 text-sm italic">
+          Atur strategi profit Mosya Gold secara presisi per gramasi.
+        </p>
       </header>
 
       {/* SELECT GOLD TYPE */}
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
+      <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-10">
         {goldTypes.map((type) => (
           <button
             key={type}
             onClick={() => setActiveGoldType(type)}
-            className={`px-8 py-3 rounded-2xl font-bold transition-all border-2 ${
+            className={`px-8 py-4 rounded-3xl font-black text-[10px] tracking-widest uppercase transition-all border-2 ${
               activeGoldType === type 
-              ? "bg-[#C9A961] text-white border-[#C9A961] shadow-lg shadow-[#C9A961]/20" 
-              : "bg-white dark:bg-[#111318] text-gray-400 border-gray-100 dark:border-gray-800"
+              ? "bg-[#C9A961] text-[#06101c] border-[#C9A961] shadow-xl shadow-[#C9A961]/20" 
+              : "bg-white dark:bg-[#111318] text-gray-400 border-gray-100 dark:border-gray-800 hover:border-[#C9A961]/30"
             }`}
           >
             {type}
@@ -122,63 +126,81 @@ export default function GoldPriceSettings() {
         ))}
       </div>
 
-      <div className="bg-white dark:bg-[#111318] rounded-[40px] p-6 md:p-10 border border-gray-100 dark:border-gray-800 shadow-xl">
+      <div className="bg-white dark:bg-[#111318] rounded-[48px] p-6 md:p-12 border border-gray-100 dark:border-gray-800 shadow-2xl relative overflow-hidden">
+        
         {/* PROFIT TYPE TOGGLE */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-10 pb-10 border-b border-gray-50 dark:border-gray-800 gap-6">
-          <div>
-            <h3 className="text-xl font-bold dark:text-white mb-1">Metode Profit: <span className="text-[#C9A961]">{activeGoldType}</span></h3>
-            <p className="text-xs text-gray-400">Pilih antara nilai tetap (Fixed) atau persentase pasar.</p>
+        <div className="flex flex-col md:flex-row items-center justify-between mb-12 pb-10 border-b border-gray-50 dark:border-gray-800 gap-8">
+          <div className="text-center md:text-left">
+            <h3 className="text-xl font-bold dark:text-white mb-2 flex items-center gap-2 justify-center md:justify-start">
+              Konfigurasi <span className="text-[#C9A961]">{activeGoldType}</span>
+            </h3>
+            <p className="text-xs text-gray-400 max-w-xs">
+              Pilih metode perhitungan margin: <b>Fixed (Rupiah)</b> atau <b>Percentage (%)</b>.
+            </p>
           </div>
-          <div className="flex bg-gray-100 dark:bg-[#1A1D23] p-1.5 rounded-2xl">
-            {["fixed", "percentage"].map((t) => (
+          <div className="flex bg-gray-50 dark:bg-[#0A0B0D] p-2 rounded-[24px] border border-gray-100 dark:border-gray-800">
+            {[
+              { id: "fixed", icon: <Banknote size={14}/>, label: "Fixed" },
+              { id: "percentage", icon: <Percent size={14}/>, label: "Percentage" }
+            ].map((t) => (
               <button
-                key={t}
-                onClick={() => setProfitType(t as any)}
-                className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase transition-all ${
-                  profitType === t ? "bg-[#C9A961] text-white shadow-md" : "text-gray-500"
+                key={t.id}
+                onClick={() => setProfitType(t.id as any)}
+                className={`flex items-center gap-2 px-8 py-3 rounded-[20px] text-[10px] font-black uppercase transition-all ${
+                  profitType === t.id 
+                  ? "bg-[#06101c] text-white shadow-lg shadow-[#06101c]/30" 
+                  : "text-gray-400 hover:text-[#C9A961]"
                 }`}
               >
-                {t}
+                {t.icon} {t.label}
               </button>
             ))}
           </div>
         </div>
 
         {/* QUICK ACTION GLOBAL */}
-        <div className="bg-[#C9A961]/5 p-6 rounded-3xl border border-[#C9A961]/20 mb-10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Zap className="text-[#C9A961]" size={20} />
-            <h4 className="font-bold text-sm dark:text-white uppercase tracking-widest">Set Semua {activeGoldType}</h4>
+        <div className="bg-[#06101c] p-8 rounded-[36px] mb-12 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+          <div className="absolute right-0 top-0 opacity-10 pointer-events-none">
+             <Zap size={150} className="text-[#C9A961]" />
           </div>
-          <div className="flex gap-2 w-full md:w-auto">
-            <div className="relative flex-1 md:w-48">
+          <div className="relative z-10">
+            <h4 className="font-black text-[10px] text-[#C9A961] uppercase tracking-[0.2em] mb-2">Bulk Update Tool</h4>
+            <p className="text-white font-serif italic text-lg leading-tight">Samakan semua margin {activeGoldType}.</p>
+          </div>
+          <div className="flex gap-3 w-full md:w-auto relative z-10">
+            <div className="relative flex-1 md:w-56">
               <input 
                 type="number" 
-                placeholder={profitType === 'fixed' ? "Contoh: 300000" : "Contoh: 5"}
+                placeholder={profitType === 'fixed' ? "E.g. 150000" : "E.g. 2.5"}
                 value={profitType === 'fixed' ? globalProfit : globalPercentage}
                 onChange={(e) => profitType === 'fixed' ? setGlobalProfit(e.target.value) : setGlobalPercentage(e.target.value)}
-                className="w-full p-3.5 pl-5 pr-10 rounded-2xl dark:bg-[#1A1D23] border border-gray-200 dark:border-gray-800 outline-none focus:ring-2 focus:ring-[#C9A961] font-bold"
+                className="w-full p-4 pl-6 pr-12 rounded-2xl bg-white/10 border border-white/20 text-white outline-none focus:ring-2 focus:ring-[#C9A961] font-bold"
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#C9A961] font-bold">
+              <span className="absolute right-5 top-1/2 -translate-y-1/2 text-[#C9A961] font-black">
                 {profitType === 'fixed' ? 'Rp' : '%'}
               </span>
             </div>
             <button 
               onClick={profitType === 'fixed' ? applyGlobalFixed : applyGlobalPercentage}
-              className="px-6 bg-[#C9A961] text-white font-bold rounded-2xl text-[10px] uppercase tracking-tighter"
+              className="px-8 bg-[#C9A961] text-[#06101c] font-black rounded-2xl text-[10px] uppercase tracking-widest active:scale-95 transition-all shadow-lg"
             >
-              Terapkan
+              Apply
             </button>
           </div>
         </div>
 
         {/* GRID MARGINS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {denominations.map((gram) => (
-            <div key={gram} className="p-5 rounded-3xl border border-gray-50 dark:border-gray-800 bg-gray-50/30 dark:bg-white/5 flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <Gem size={14} className="text-[#C9A961]" />
-                <span className="text-xs font-bold dark:text-white uppercase tracking-widest">{gram} Gram</span>
+            <div key={gram} className="group p-6 rounded-[32px] border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-white/5 hover:border-[#C9A961]/30 transition-all flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-[#06101c] text-[#C9A961] flex items-center justify-center font-black text-[10px]">
+                    {gram}
+                  </div>
+                  <span className="text-[11px] font-black dark:text-white uppercase tracking-widest">{gram} Gram</span>
+                </div>
+                <Gem size={14} className="text-[#C9A961] opacity-30 group-hover:opacity-100 transition-opacity" />
               </div>
               <div className="relative">
                 <input 
@@ -189,28 +211,38 @@ export default function GoldPriceSettings() {
                     if(profitType === 'fixed') setMargins({...margins, [gram]: val});
                     else setPercentageMargins({...percentageMargins, [gram]: val});
                   }}
-                  className="w-full p-4 rounded-2xl dark:bg-[#1A1D23] bg-white border border-gray-100 dark:border-zinc-800 text-right font-serif font-bold text-[#C9A961] focus:ring-2 focus:ring-[#C9A961] outline-none"
+                  className="w-full p-5 rounded-2xl dark:bg-[#0A0B0D] bg-white border border-gray-100 dark:border-zinc-800 text-right font-serif font-bold text-2xl text-[#C9A961] focus:ring-2 focus:ring-[#C9A961] outline-none"
                 />
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-gray-400">
-                  {profitType === 'fixed' ? 'RP' : '%'}
+                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                  {profitType === 'fixed' ? 'Nominal' : 'Rate'}
                 </span>
               </div>
             </div>
           ))}
         </div>
 
+        {/* SAVE BUTTON */}
         <button 
           onClick={handleSaveAll}
           disabled={loading}
-          className="w-full py-6 bg-[#1A1D23] dark:bg-white text-white dark:text-[#1A1D23] rounded-[32px] font-black tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl hover:scale-[1.02] transition-all disabled:opacity-50"
+          className="group w-full py-6 bg-[#06101c] dark:bg-[#C9A961] text-white dark:text-[#06101c] rounded-[32px] font-black tracking-[0.3em] flex items-center justify-center gap-4 shadow-2xl active:scale-95 transition-all disabled:opacity-50"
         >
-          {loading ? "MENYIMPAN..." : (
+          {loading ? (
+            <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
             <>
-              <Save size={20} /> SIMPAN MARGIN {activeGoldType.toUpperCase()}
+              <Save size={20} className="group-hover:rotate-12 transition-transform" /> 
+              SAVE MARGINS
             </>
           )}
         </button>
       </div>
+
+      <footer className="mt-8 text-center">
+        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em]">
+          Mosya Gold Infrastructure • Secured & Syariah
+        </p>
+      </footer>
     </div>
   );
 }

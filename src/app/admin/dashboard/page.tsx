@@ -79,8 +79,8 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-4 p-4 bg-white dark:bg-[#1A1D23] rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#C9A961] to-[#D4AF37] flex items-center justify-center text-white shadow-lg shadow-[#C9A961]/20">
-            <ShieldCheck size={24} />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#C9A961] to-[#D4AF37] flex items-center justify-center">
+            <img src="/logo.png" alt="Mosya Admin Logo" className="h-full w-full object-contain" />
           </div>
           <div>
             <p className="text-[10px] font-black text-gray-400  tracking-widest leading-none mb-1">Security Level</p>

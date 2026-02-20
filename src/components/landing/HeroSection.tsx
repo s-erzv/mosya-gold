@@ -121,63 +121,57 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ heroOpacity, heroScale
             style={{ scale: heroScale }}
             className="relative flex flex-col items-center lg:items-end w-full"
           >
-            <div className="relative w-full flex justify-center lg:justify-end">
-              <AnimatePresence mode="wait">
+            {/* WRAPPER UTAMA: Mengunci tinggi agar tidak goyang (Layout Shift) */}
+            <div className="relative w-full max-w-[280px] md:max-w-[480px] aspect-[4/5] flex items-center justify-center">
+             <AnimatePresence mode="wait">
                 {slides[currentSlide].type === 'card' ? (
                   <motion.div
                     key="gold-card"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.6 }}
-                    className="w-full max-w-[450px] p-8 md:p-10 flex flex-col justify-between bg-white dark:bg-[#111318] rounded-[40px] shadow-2xl border border-[#C9A961]/20 relative overflow-hidden h-fit"
+                    /* h-full w-full agar mengikuti aspect ratio parent */
+                    className="w-full h-full p-6 md:p-10 flex flex-col justify-between bg-white dark:bg-[#111318] rounded-[30px] md:rounded-[40px] shadow-xl md:shadow-2xl border border-[#C9A961]/20 relative overflow-hidden"
                   >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#C9A961]/5 rounded-full blur-3xl" />
-                    <div className="space-y-8 relative z-10">
+                    <div className="absolute top-0 right-0 w-24 h-24 md:w-32 md:h-32 bg-[#C9A961]/5 rounded-full blur-2xl md:blur-3xl" />
+                    <div className="space-y-4 md:space-y-6 relative z-10 flex-grow">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C9A961]/10 text-[#C9A961] border border-[#C9A961]/20">
-                          <Clock size={14} className="animate-pulse" />
-                          <span className="text-[10px] font-black tracking-widest uppercase">Live Market</span>
+                        <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#C9A961]/10 text-[#C9A961] border border-[#C9A961]/20">
+                          <Clock size={12} className="animate-pulse" />
+                          <span className="text-[9px] md:text-[10px] font-black tracking-widest uppercase">Live Market</span>
                         </div>
-                        <Gem className="text-[#C9A961]" size={28} />
+                        <Gem className="text-[#C9A961] w-6 h-6 md:w-7 md:h-7" />
                       </div>
                       <div>
-                        <h3 className="text-3xl font-serif font-bold dark:text-white mb-2 leading-tight">Monitor Harga <span className="italic text-[#C9A961]">Real-time</span></h3>
-                        <p className="text-gray-500 text-sm">Update harga pasar bursa emas hari ini.</p>
+                        <h3 className="text-xl md:text-3xl font-serif font-bold dark:text-white mb-1 md:mb-2 leading-tight">Monitor Harga <span className="italic text-[#C9A961]">Real-time</span></h3>
+                        <p className="text-gray-500 text-[10px] md:text-sm">Update harga pasar bursa emas hari ini.</p>
                       </div>
                       
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         {loadingGold ? (
-                          [1, 2].map(i => <div key={i} className="h-24 w-full bg-gray-100 dark:bg-white/5 animate-pulse rounded-3xl" />)
+                          [1, 2].map(i => <div key={i} className="h-14 md:h-20 w-full bg-gray-100 dark:bg-white/5 animate-pulse rounded-2xl md:rounded-3xl" />)
                         ) : (
                           goldData?.settings?.map((setting: any) => {
-                            // Mencari harga market berdasarkan brand yang sesuai
                             const brandMapping: Record<string, string> = {
-                              "Antam Redmark": "ANTAM",
+                              "Antam Certicard": "ANTAM",
                               "Antam Retro": "ANTAM MULIA RETRO"
                             };
-
                             const targetBrand = brandMapping[setting.gold_type] || setting.gold_type;
                             const market = goldData.rawMarketData?.find((d: any) => d.brand.toUpperCase() === targetBrand.toUpperCase());
-                            
-                            // Gunakan fungsi kalkulasi dari gold.ts (jika tersedia) atau hitung manual di sini
                             const basePrice = market?.sell_price || 0;
-                            const finalPrice = goldData.calculateFinalPrice ? 
-                              goldData.calculateFinalPrice(1, basePrice, setting) : 
-                              (basePrice + (Number(setting.weight_margins?.["1"]) || 0));
+                            const finalPrice = goldData.calculateFinalPrice ? goldData.calculateFinalPrice(1, basePrice, setting) : 0;
 
                             if (basePrice === 0) return null;
 
                             return (
-                              <div key={setting.gold_type} className="p-6 rounded-[28px] bg-gray-50 dark:bg-[#1A1D23] border border-gray-100 dark:border-white/5 flex items-center justify-between group hover:border-[#C9A961]/50 transition-all duration-300">
+                              <div key={setting.gold_type} className="p-3 md:p-5 rounded-[20px] md:rounded-[28px] bg-gray-50 dark:bg-[#1A1D23] border border-gray-100 dark:border-white/5 flex items-center justify-between group hover:border-[#C9A961]/50 transition-all duration-300">
                                 <div>
-                                  <p className="text-[10px] font-black text-[#C9A961] tracking-widest uppercase mb-1">{setting.gold_type} (1g)</p>
-                                  <p className="text-2xl font-serif font-bold dark:text-white">
-                                    {formatIDR(finalPrice)}
-                                  </p>
+                                  <p className="text-[7px] md:text-[10px] font-black text-[#C9A961] tracking-widest uppercase mb-0.5 md:mb-1">{setting.gold_type}</p>
+                                  <p className="text-sm md:text-2xl font-serif font-bold dark:text-white">{formatIDR(finalPrice)}</p>
                                 </div>
-                                <div className="p-2 bg-white dark:bg-[#0A0B0D] rounded-xl shadow-sm group-hover:bg-[#C9A961] group-hover:text-white transition-colors">
-                                  <TrendingUp size={18} />
+                                <div className="p-1 md:p-2 bg-white dark:bg-[#0A0B0D] rounded-lg md:rounded-xl shadow-sm group-hover:bg-[#C9A961] group-hover:text-white transition-colors">
+                                  <TrendingUp className="w-3 h-3 md:w-[18px] md:h-[18px]" />
                                 </div>
                               </div>
                             );
@@ -193,13 +187,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ heroOpacity, heroScale
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="relative w-full max-w-[550px]"
+                    className="relative w-full h-full"
                   >
-                    <div className="relative w-full rounded-[40px] md:rounded-[60px] overflow-hidden shadow-2xl border-4 md:border-8 border-white dark:border-[#1A1D23] bg-white h-fit">
+                    <div className="relative w-full h-full rounded-[30px] md:rounded-[60px] overflow-hidden shadow-xl md:shadow-2xl border-4 md:border-8 border-white dark:border-[#1A1D23] bg-white">
                       <img 
                         src={slides[currentSlide].src!} 
                         alt="Mosya Gold Collection" 
-                        className="w-full h-auto block object-contain" 
+                        className="w-full h-full object-cover" 
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                     </div>
@@ -207,14 +201,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ heroOpacity, heroScale
                     <motion.div
                       initial={{ opacity: 0, x: -20 }} 
                       animate={{ opacity: 1, x: 0 }}
-                      className="absolute -bottom-4 -left-4 p-4 md:p-5 bg-white dark:bg-[#111318] rounded-[25px] md:rounded-[30px] shadow-2xl border border-gray-100 dark:border-white/10 flex items-center gap-3 md:gap-4 z-20"
+                      className="absolute -bottom-2 -left-2 md:-bottom-4 md:-left-4 p-2.5 md:p-5 bg-white dark:bg-[#111318] rounded-[18px] md:rounded-[30px] shadow-xl border border-gray-100 dark:border-white/10 flex items-center gap-2 md:gap-4 z-20"
                     >
-                      <div className="p-2 md:p-3 bg-[#C9A961]/10 rounded-xl">
-                        <Award size={20} className="text-[#C9A961]" />
+                      <div className="p-1 md:p-3 bg-[#C9A961]/10 rounded-lg md:rounded-2xl text-[#C9A961]">
+                        <Award className="w-[14px] h-[14px] md:w-[24px] md:h-[24px]" />
                       </div>
                       <div>
-                        <p className="text-xs md:text-sm font-bold dark:text-white tracking-tight">Kadar 99.9%</p>
-                        <p className="text-[9px] md:text-[10px] text-[#C9A961] font-bold uppercase tracking-widest">Certified Gold</p>
+                        <p className="text-[9px] md:text-sm font-bold dark:text-white tracking-tight">Kadar 99.9%</p>
+                        <p className="text-[7px] md:text-[10px] text-[#C9A961] font-bold uppercase tracking-widest">Certified Gold</p>
                       </div>
                     </motion.div>
                   </motion.div>
@@ -222,7 +216,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ heroOpacity, heroScale
               </AnimatePresence>
             </div>
 
-            <div className="mt-8 flex justify-center lg:justify-end w-full max-w-[550px]">
+            {/* Pagination Dots */}
+            <div className="mt-8 flex justify-center lg:justify-end w-full max-w-[480px]">
               <div className="flex gap-2.5">
                 {slides.map((_, i) => (
                   <button
