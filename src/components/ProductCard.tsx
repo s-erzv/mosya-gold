@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -20,6 +21,11 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, index }: ProductCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleContactAdmin = () => {
     const phoneNumber = "628123456789"; // Ganti dengan nomor WhatsApp Mosya Gold
@@ -102,9 +108,8 @@ export default function ProductCard({ product, index }: ProductCardProps) {
         <div className="absolute top-0 left-0 w-0 h-1 bg-[#C9A961] group-hover:w-full transition-all duration-700" />
       </motion.div>
 
-      {/* MODAL DETAIL */}
-      <AnimatePresence>
-        {isOpen && (
+      {mounted && isOpen && ReactDOM.createPortal(
+        <AnimatePresence>
           <div className="fixed inset-0 flex items-center justify-center z-[9999] px-4">
             {/* Backdrop */}
             <motion.div 
@@ -125,7 +130,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               {/* Close Button */}
               <button 
                 onClick={() => setIsOpen(false)}
-                className="absolute top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-all shadow-xl"
+                className="absolute top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-black transition-all shadow-xl"
               >
                 <X size={24} />
               </button>
@@ -187,8 +192,9 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               </div>
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.getElementById("modal-root") as HTMLElement
+      )}
     </>
   );
 }

@@ -26,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50">
             <main>{children}</main>
             <WhatsAppFloating />
+            <div id="modal-root" />
           </div>
         </ThemeProvider>
       </body>
