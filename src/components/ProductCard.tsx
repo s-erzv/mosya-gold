@@ -130,13 +130,13 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               {/* Close Button */}
               <button 
                 onClick={() => setIsOpen(false)}
-                className="absolute top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-black transition-all shadow-xl"
+                className="absolute top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-gray-700 dark:text-white transition-all shadow-md"
               >
                 <X size={24} />
               </button>
 
               {/* Bagian Gambar */}
-              <div className="relative w-full md:w-1/2 aspect-square md:aspect-auto h-[350px] md:h-auto overflow-hidden bg-gray-50">
+              <div className="relative w-full md:w-1/2 aspect-square md:aspect-auto h-64 sm:h-80 md:h-auto overflow-hidden bg-gray-50">
                 <Image 
                   src={product.image_url || "/logo.png"} 
                   alt={product.name} 
@@ -146,7 +146,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               </div>
 
               {/* Bagian Deskripsi */}
-              <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+              <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center">
                 <div className="mb-6">
                   <span className="px-4 py-1.5 bg-[#C9A961]/10 text-[#C9A961] text-[10px] font-black tracking-[0.2em] rounded-full border border-[#C9A961]/20">
                     {product.category.toUpperCase()}
@@ -167,14 +167,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-10">
+                <div className="grid grid-cols-1 gap-4 mb-10">
                   <div className="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
                     <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Kualitas</p>
                     <p className="font-bold text-[#06101c] dark:text-white">Terjamin</p>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
-                    <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Status</p>
-                    <p className="font-bold text-green-500">Tersedia</p>
                   </div>
                 </div>
 
