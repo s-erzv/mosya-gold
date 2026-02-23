@@ -2,46 +2,39 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const dateParam = searchParams.get('date');
+  
   const EMAS_API_KEY = process.env.EMAS_API_KEY;
   const BASE_URL = 'https://emas.maulanar.my.id/api/prices';
 
   try {
-    const resToday = await fetch(`${BASE_URL}?weight[eq]=1`, {
+    let url = `${BASE_URL}?weight[eq]=1`;
+    if (dateParam) url += `&updated_at[eq]=${dateParam}`;
+
+    const res = await fetch(url, {
       headers: { 'X-API-Key': EMAS_API_KEY || '', 'Accept': 'application/json' },
       next: { revalidate: 3600 } 
     });
 
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const dateStr = yesterday.toISOString().split('T')[0];
+    const json = await res.json();
+    if (!res.ok) return NextResponse.json({ status: 'error' }, { status: res.status });
 
-    const resHistory = await fetch(`${BASE_URL}?weight[eq]=1&updated_at[eq]=${dateStr}`, {
-      headers: { 'X-API-Key': EMAS_API_KEY || '', 'Accept': 'application/json' },
-      next: { revalidate: 3600 }
+    const filteredData = json.data.filter((item: any) => {
+      const brand = item.brand.toUpperCase();
+      const resrc = item.resource.toLowerCase();
+
+      if (brand === 'ANTAM') return resrc === 'antam'; 
+      if (brand === 'ANTAM MULIA RETRO') return resrc === 'galeri24';
+      if (brand === 'UBS') return resrc === 'galeri24';
+      if (brand === 'GALERI 24') return resrc === 'galeri24';
+      if (brand === 'EMASKU') return resrc === 'hartadinata';
+      
+      return false;
     });
 
-    if (!resToday.ok) return NextResponse.json({ status: 'error', message: 'API Error' }, { status: resToday.status });
-
-    const jsonToday = await resToday.json();
-    const jsonHistory = await resHistory.json();
-
-    const monitoredBrands = ['ANTAM', 'ANTAM MULIA RETRO', 'GALERI 24', 'EMASKU', 'UBS'];
-    
-    const dataWithHistory = jsonToday.data
-      .filter((item: any) => monitoredBrands.includes(item.brand.toUpperCase()))
-      .map((todayItem: any) => {
-        const historyItem = jsonHistory.data?.find((h: any) => h.brand === todayItem.brand);
-        return {
-          ...todayItem,
-          yesterday_price: historyItem ? historyItem.sell_price : todayItem.sell_price
-        };
-      });
-
-    return NextResponse.json({
-      status: 'success',
-      data: dataWithHistory
-    });
+    return NextResponse.json({ status: 'success', data: filteredData });
 
   } catch (error: any) {
     return NextResponse.json({ status: 'error', message: error.message }, { status: 500 });

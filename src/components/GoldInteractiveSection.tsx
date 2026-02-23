@@ -34,45 +34,65 @@ export default function GoldInteractiveSection() {
 
   const loadDataAndHistory = async () => {
     setLoading(true);
-    // 1. Ambil data harga hari ini
-    const res = await fetchGoldPriceData();
-    setData(res);
-
-    // 2. Ambil data H-1 dari API Maulana untuk hitung tren (Tanpa Supabase)
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const dateString = yesterday.toISOString().split('T')[0];
-
     try {
+      const res = await fetchGoldPriceData();
+      setData(res);
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const dateString = yesterday.toISOString().split('T')[0];
+
       const baseUrl = typeof window !== 'undefined' ? '' : process.env.NEXT_PUBLIC_SITE_URL;
       const historyRes = await fetch(`${baseUrl}/api/gold-price?date=${dateString}`);
       const historyJson = await historyRes.json();
       
       const histories: any = {};
-      const monitoredKeys = ['ANTAM', 'ANTAM MULIA RETRO', 'UBS', 'GALERI 24', 'EMASKU'];
+      const monitoredKeys = [
+        { brand: 'ANTAM', resource: 'antam' }, // Kunci: Hanya ambil dari Logam Mulia resmi
+        { brand: 'ANTAM MULIA RETRO', resource: 'galeri24' },
+        { brand: 'UBS', resource: 'galeri24' },
+        { brand: 'GALERI 24', resource: 'galeri24' },
+        { brand: 'EMASKU', resource: 'hartadinata' }
+      ];
 
-      monitoredKeys.forEach(key => {
-        const currentBrand = res.rawMarketData?.find((d: any) => d.brand.toUpperCase() === key);
-        const prevBrand = historyJson.data?.find((d: any) => d.brand.toUpperCase() === key);
+      monitoredKeys.forEach(({ brand, resource }) => {
+        const currentBrand = res.rawMarketData?.find(
+          (d: any) => d.brand.toUpperCase() === brand && d.resource.toLowerCase() === resource
+        );
+
+        const prevBrand = historyJson.data?.find(
+          (d: any) => d.brand.toUpperCase() === brand && d.resource.toLowerCase() === resource
+        );
 
         if (currentBrand && prevBrand) {
-          const diff = Number(currentBrand.sell_price) - Number(prevBrand.sell_price);
-          histories[key] = {
-            change: diff, // Nominal Rupiah
-            percent: ((Math.abs(diff) / prevBrand.sell_price) * 100).toFixed(2),
+          const currentPrice = Number(currentBrand.sell_price);
+          const oldPrice = Number(prevBrand.sell_price);
+          const diff = currentPrice - oldPrice;
+
+          histories[brand] = {
+            change: diff,
+            percent: ((Math.abs(diff) / oldPrice) * 100).toFixed(2),
             isUp: diff > 0,
             isDown: diff < 0,
-            current: currentBrand.sell_price
+            current: currentPrice
           };
         } else {
-          histories[key] = { change: 0, percent: "0.00", isUp: false, isDown: false, current: currentBrand?.sell_price || 0 };
+          histories[brand] = { 
+            change: 0, 
+            percent: "0.00", 
+            isUp: false, 
+            isDown: false, 
+            current: currentBrand?.sell_price || 0 
+          };
         }
       });
+
       setBrandHistories(histories);
     } catch (err) {
-      console.error("Gagal ambil history:", err);
+      console.error("Gagal sinkronisasi data bursa:", err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -84,7 +104,6 @@ export default function GoldInteractiveSection() {
   const formatIDR = (val: number) => 
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(val);
 
-  // Fungsi helper untuk format tren rupiah (misal: +Rp 16.000)
   const formatTrendIDR = (val: number) => {
     const sign = val > 0 ? "+" : "";
     return sign + formatIDR(val);
