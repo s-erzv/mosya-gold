@@ -6,7 +6,6 @@ import {
   Clock, Calculator, Gem, Sparkles, ShoppingBag, 
   ArrowDownRight, TrendingUp, ArrowDown, ChevronRight, Minus 
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 
 export default function GoldInteractiveSection() {
   const [data, setData] = useState<any>(null);
@@ -34,34 +33,45 @@ export default function GoldInteractiveSection() {
   }, []);
 
   const loadDataAndHistory = async () => {
+    setLoading(true);
+    // 1. Ambil data harga hari ini
     const res = await fetchGoldPriceData();
     setData(res);
 
-    const monitoredKeys = ['ANTAM', 'ANTAM MULIA RETRO', 'UBS', 'GALERI 24', 'EMASKU'];
-    const histories: any = {};
+    // 2. Ambil data H-1 dari API Maulana untuk hitung tren (Tanpa Supabase)
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const dateString = yesterday.toISOString().split('T')[0];
 
-    for (const key of monitoredKeys) {
-      const { data: h } = await supabase
-        .from('gold_price_history')
-        .select('sell_price, recorded_at')
-        .eq('gold_type', key)
-        .order('recorded_at', { ascending: false })
-        .limit(2);
+    try {
+      const baseUrl = typeof window !== 'undefined' ? '' : process.env.NEXT_PUBLIC_SITE_URL;
+      const historyRes = await fetch(`${baseUrl}/api/gold-price?date=${dateString}`);
+      const historyJson = await historyRes.json();
+      
+      const histories: any = {};
+      const monitoredKeys = ['ANTAM', 'ANTAM MULIA RETRO', 'UBS', 'GALERI 24', 'EMASKU'];
 
-      if (h && h.length > 2) {
-        const diff = Number(h[0].sell_price) - Number(h[1].sell_price);
-        histories[key] = {
-          change: Math.abs(diff),
-          percent: ((Math.abs(diff) / h[1].sell_price) * 100).toFixed(2),
-          isUp: diff > 0,
-          isDown: diff < 0,
-          current: h[0].sell_price
-        };
-      } else {
-        histories[key] = { change: 0, percent: "0.00", isUp: false, isDown: false, current: h?.[0]?.sell_price || 0 };
-      }
+      monitoredKeys.forEach(key => {
+        const currentBrand = res.rawMarketData?.find((d: any) => d.brand.toUpperCase() === key);
+        const prevBrand = historyJson.data?.find((d: any) => d.brand.toUpperCase() === key);
+
+        if (currentBrand && prevBrand) {
+          const diff = Number(currentBrand.sell_price) - Number(prevBrand.sell_price);
+          histories[key] = {
+            change: diff, // Nominal Rupiah
+            percent: ((Math.abs(diff) / prevBrand.sell_price) * 100).toFixed(2),
+            isUp: diff > 0,
+            isDown: diff < 0,
+            current: currentBrand.sell_price
+          };
+        } else {
+          histories[key] = { change: 0, percent: "0.00", isUp: false, isDown: false, current: currentBrand?.sell_price || 0 };
+        }
+      });
+      setBrandHistories(histories);
+    } catch (err) {
+      console.error("Gagal ambil history:", err);
     }
-    setBrandHistories(histories);
     setLoading(false);
   };
 
@@ -73,6 +83,12 @@ export default function GoldInteractiveSection() {
 
   const formatIDR = (val: number) => 
     new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(val);
+
+  // Fungsi helper untuk format tren rupiah (misal: +Rp 16.000)
+  const formatTrendIDR = (val: number) => {
+    const sign = val > 0 ? "+" : "";
+    return sign + formatIDR(val);
+  };
 
   const getMarketData = (tabName: string) => {
     if (!data?.rawMarketData) return null;
@@ -106,10 +122,8 @@ export default function GoldInteractiveSection() {
   };
 
   const handleWhatsApp = (type: 'buy' | 'sell' | 'jewelry') => {
-    const phoneNumber = "6285184852002"; // Nomor Mosya Gold
+    const phoneNumber = "6285184852002"; 
     let message = "";
-    
-    // Header pesan yang konsisten
     const greeting = "Assalamu'alaikum / Halo Admin Mosya Gold,";
     const closing = "\n\nMohon informasi selanjutnya ya, terima kasih. ✨";
 
@@ -118,24 +132,18 @@ export default function GoldInteractiveSection() {
                 `Produk: ${activeTab}\n` +
                 `Jumlah: ${customGram} Gram\n` +
                 `Estimasi Harga: ${formatIDR(getMosyaPrice(customGram, activeTab))}\n\n` +
-                `Apakah stoknya tersedia untuk saat ini?` + 
-                closing;
+                `Apakah stoknya tersedia untuk saat ini?` + closing;
     } else if (type === 'sell') {
       message = `${greeting}\n\nSaya ingin menanyakan perihal Buyback (Jual Kembali) emas saya:\n\n` +
                 `Jenis Emas: ${activeTab}\n` +
                 `Berat: ${customGram} Gram\n` +
                 `Estimasi Terima: ${formatIDR(calculateBuyback(customGram, activeTab))}\n\n` +
-                `Boleh dibantu instruksi untuk proses transaksinya?` +
-                closing;
+                `Boleh dibantu instruksi untuk proses transaksinya?` + closing;
     } else {
       message = `${greeting}\n\nSaya ingin berkonsultasi mengenai Layanan Buyback Perhiasan di Mosya Gold.\n\n` +
-                `Saya memiliki beberapa perhiasan yang ingin dijual kembali. Boleh info persyaratannya Mas/Mba?` +
-                closing;
+                `Saya memiliki beberapa perhiasan yang ingin dijual kembali. Boleh info persyaratannya Mas/Mba?` + closing;
     }
-
-    // Gunakan wa.me dengan encodeURIComponent
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   if (loading || !data) return (
@@ -151,7 +159,6 @@ export default function GoldInteractiveSection() {
     <section id="gold-interactive-section" className="py-10 md:py-24 bg-white dark:bg-[#0A0B0D] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         
-        {/* Header Tren */}
         <div className="flex flex-col items-center text-center mb-8 md:mb-16">
           <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-[#06101c]/10 bg-white dark:bg-[#111318] text-[#06101c] dark:text-[#C9A961] mb-4 shadow-sm border-t-2 border-t-[#C9A961]">
             <Clock size={12} className="text-[#C9A961]" />
@@ -169,16 +176,15 @@ export default function GoldInteractiveSection() {
             <div className="text-left">
               <p className="text-[8px] text-gray-400 font-bold uppercase tracking-widest">Tren Antam (1g)</p>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-[#06101c] dark:text-white">{formatIDR(headerHistory.change)}</span>
+                <span className="text-sm font-bold text-[#06101c] dark:text-white">{formatTrendIDR(headerHistory.change)}</span>
                 <span className={`text-[10px] font-black ${headerHistory.isUp ? 'text-green-500' : headerHistory.isDown ? 'text-red-500' : 'text-gray-400'}`}>
-                  {headerHistory.isUp ? '+' : headerHistory.isDown ? '-' : ''}{headerHistory.percent}%
+                  ({headerHistory.isUp ? '+' : ''}{headerHistory.percent}%)
                 </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tab Navigation */}
         <div className="flex justify-center mb-8">
           <div className="grid grid-cols-3 w-full max-w-lg bg-[#06101c]/5 dark:bg-[#111318] p-1 rounded-2xl border border-gray-100 dark:border-gray-800">
             {tabs.map((tab) => (
@@ -263,7 +269,6 @@ export default function GoldInteractiveSection() {
           )}
         </AnimatePresence>
 
-        {/* Bursa Harga Per Brand */}
         <div className="mt-16 md:mt-32 pt-12 border-t border-gray-100 dark:border-gray-800">
           <h3 className="text-2xl md:text-4xl font-serif text-[#06101c] dark:text-white italic opacity-40 mb-10 text-center">Bursa Harga (1g)</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -284,7 +289,7 @@ export default function GoldInteractiveSection() {
                     </div>
                     <div className={`px-3 py-1 rounded-full flex items-center gap-1.5 ${trendColor}`}>
                       <span className="text-[9px] font-bold uppercase">
-                        {trendIcon} {history.percent}%
+                        {trendIcon} {formatTrendIDR(history.change)}
                       </span>
                     </div>
                   </div>
@@ -292,7 +297,7 @@ export default function GoldInteractiveSection() {
                     <p className="text-3xl md:text-4xl font-serif text-[#06101c] dark:text-white">
                       {brandData ? formatIDR(brandData.sell_price) : formatIDR(0)}
                     </p>
-                    <p className="text-[9px] text-gray-400 mt-2 italic">*Bursa Market Live</p>
+                    <p className="text-[9px] text-gray-400 mt-2 italic">*Live</p>
                   </div>
                 </div>
               );
