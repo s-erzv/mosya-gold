@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -266,7 +267,7 @@ export default function AddBlogPage() {
     
     const { error: uploadError } = await supabase.storage.from('blogs').upload(fileName, file);
     if (uploadError) {
-      alert("Gagal upload gambar");
+      toast("Gagal upload gambar");
       setLoading(false);
       return;
     }
@@ -287,7 +288,7 @@ export default function AddBlogPage() {
   };
 
   const handleSubmit = async () => {
-    if(!title || blocks.length === 0) return alert("Isi judul dan konten dulu ya!");
+    if(!title || blocks.length === 0) return toast("Isi judul dan konten dulu ya!");
     setLoading(true);
     const slug = title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
     
@@ -300,7 +301,7 @@ export default function AddBlogPage() {
     }]);
 
     if (!error) router.push("/admin/blog");
-    else alert("Error: " + error.message);
+    else toast("Error: " + error.message);
     setLoading(false);
   };
 

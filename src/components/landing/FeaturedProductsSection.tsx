@@ -130,7 +130,7 @@ export const FeaturedProductsSection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="mt-12 bg-[#06101c] rounded-[32px] p-6 md:p-10 relative overflow-hidden border border-[#C9A961]/20 shadow-xl"
+          className="mt-12 bg-[#0b213b] rounded-[32px] p-6 md:p-10 relative overflow-hidden border border-[#C9A961]/20 shadow-xl"
         >
           <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[radial-gradient(circle_at_center,_#C9A961_1px,_transparent_1px)] bg-[size:16px_16px]"></div>
 
@@ -150,7 +150,7 @@ export const FeaturedProductsSection: React.FC = () => {
 
             <Link
               href="https://wa.me/6285184852002?text=Halo%20Mosya%20Gold%2C%20saya%20tertarik%20dengan%20koleksi%20pilihan%20dan%20ingin%20tanya%20layanan%20COD"
-              className="group w-full md:w-auto px-8 py-3.5 bg-[#C9A961] text-[#06101c] text-[10px] font-black rounded-xl hover:bg-white transition-all shadow-lg flex items-center justify-center gap-2 uppercase tracking-widest"
+              className="group w-full md:w-auto px-8 py-3.5 bg-[#C9A961] text-[#0b213b] text-[10px] font-black rounded-xl hover:bg-white transition-all shadow-lg flex items-center justify-center gap-2 uppercase tracking-widest"
             >
               Konsultasi WA <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </Link>

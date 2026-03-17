@@ -155,7 +155,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ heroOpacity, heroScale
                           goldData?.settings?.map((setting: any) => {
                             const brandMapping: Record<string, string> = {
                               "Antam Certicard": "ANTAM",
-                              "Antam Retro": "ANTAM MULIA RETRO"
+                              "Antam Retro": "ANTAM"
                             };
                             const targetBrand = brandMapping[setting.gold_type] || setting.gold_type;
                             const market = goldData.rawMarketData?.find((d: any) => d.brand.toUpperCase() === targetBrand.toUpperCase());

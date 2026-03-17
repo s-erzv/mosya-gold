@@ -54,10 +54,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             sizes="(max-width: 768px) 50vw, 33vw"
           />
           
-          <div className="absolute inset-0 bg-gradient-to-t from-[#06101c]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b213b]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           <div className="absolute top-3 md:top-6 left-3 md:left-6">
-            <div className="px-3 md:px-5 py-1.5 bg-white/90 dark:bg-[#06101c]/90 backdrop-blur-md rounded-full border border-[#C9A961]/20 shadow-lg">
+            <div className="px-3 md:px-5 py-1.5 bg-white/90 dark:bg-[#0b213b]/90 backdrop-blur-md rounded-full border border-[#C9A961]/20 shadow-lg">
               <span className="text-[8px] md:text-[10px] font-black tracking-[0.2em] uppercase text-[#C9A961]">
                 {product.category}
               </span>
@@ -65,7 +65,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           </div>
 
           <div className="hidden md:flex absolute inset-0 items-center justify-center translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-             <div className="bg-[#06101c] text-[#C9A961] px-8 py-3 rounded-2xl font-black text-xs tracking-widest flex items-center gap-3 border border-[#C9A961]/30 shadow-2xl">
+             <div className="bg-[#0b213b] text-[#C9A961] px-8 py-3 rounded-2xl font-black text-xs tracking-widest flex items-center gap-3 border border-[#C9A961]/30 shadow-2xl">
                VIEW DETAIL <ArrowRight size={14} />
              </div>
           </div>
@@ -85,7 +85,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
             </div>
           </div>
 
-          <h3 className="font-serif font-bold text-sm md:text-2xl text-[#06101c] dark:text-white mb-4 line-clamp-2 leading-tight group-hover:text-[#C9A961] transition-colors">
+          <h3 className="font-serif font-bold text-sm md:text-2xl text-[#0b213b] dark:text-white mb-4 line-clamp-2 leading-tight group-hover:text-[#C9A961] transition-colors">
             {product.name}
           </h3>
 
@@ -117,7 +117,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-[#06101c]/80 backdrop-blur-md"
+              className="absolute inset-0 bg-[#0b213b]/80 backdrop-blur-md"
             />
 
             {/* Modal Content */}
@@ -153,7 +153,7 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                   </span>
                 </div>
 
-                <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#06101c] dark:text-white mb-6 leading-tight">
+                <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#0b213b] dark:text-white mb-6 leading-tight">
                   {product.name}
                 </h2>
 
@@ -170,13 +170,13 @@ export default function ProductCard({ product, index }: ProductCardProps) {
                 <div className="grid grid-cols-1 gap-4 mb-10">
                   <div className="p-4 rounded-2xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
                     <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Kualitas</p>
-                    <p className="font-bold text-[#06101c] dark:text-white">Terjamin</p>
+                    <p className="font-bold text-[#0b213b] dark:text-white">Terjamin</p>
                   </div>
                 </div>
 
                 <button 
                   onClick={handleContactAdmin}
-                  className="group w-full py-5 bg-[#C9A961] text-[#06101c] font-black text-xs tracking-[0.2em] rounded-[24px] shadow-xl shadow-[#C9A961]/20 flex items-center justify-center gap-3 hover:bg-[#06101c] hover:text-white transition-all duration-500"
+                  className="group w-full py-5 bg-[#C9A961] text-[#0b213b] font-black text-xs tracking-[0.2em] rounded-[24px] shadow-xl shadow-[#C9A961]/20 flex items-center justify-center gap-3 hover:bg-[#0b213b] hover:text-white transition-all duration-500"
                 >
                   <MessageCircle size={20} />
                   HUBUNGI ADMIN SEKARANG

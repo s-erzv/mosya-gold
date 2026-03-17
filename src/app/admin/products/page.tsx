@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Plus, Search, Trash2, Edit3, PackageOpen, Loader2, X, Save, Image as ImageIcon } from "lucide-react";
+import { toast } from "sonner";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -36,7 +37,7 @@ export default function ProductManagement() {
     const { error } = await supabase.from("products").delete().eq("id", id);
     
     if (error) {
-      alert("Gagal menghapus: " + error.message);
+      toast("Gagal menghapus: " + error.message);
     } else {
       // Hapus gambar jika ada
       if (imageUrl) {
@@ -62,7 +63,7 @@ export default function ProductManagement() {
       .eq("id", editingProduct.id);
 
     if (error) {
-      alert("Gagal update: " + error.message);
+      toast("Gagal update: " + error.message);
     } else {
       setIsEditModalOpen(false);
       fetchProducts();

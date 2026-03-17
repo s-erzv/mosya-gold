@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { toast } from "sonner";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -116,7 +117,7 @@ export default function EditBlogPage() {
     const fetchBlog = async () => {
       const { data, error } = await supabase.from("blogs").select("*").eq("id", id).single();
       if (error) {
-        alert("Artikel tidak ditemukan");
+        toast("Artikel tidak ditemukan");
         router.push("/admin/blog");
         return;
       }
@@ -141,7 +142,7 @@ export default function EditBlogPage() {
     const fileName = `${Date.now()}.${file.name.split('.').pop()}`;
     const { error: uploadError } = await supabase.storage.from('blogs').upload(fileName, file);
     if (uploadError) {
-      alert("Gagal upload gambar");
+      toast("Gagal upload gambar");
       setIsSaving(false);
       return;
     }
@@ -163,7 +164,7 @@ export default function EditBlogPage() {
   };
 
   const handleUpdate = async () => {
-    if(!title || blocks.length === 0) return alert("Data belum lengkap!");
+    if(!title || blocks.length === 0) return toast("Data belum lengkap!");
     setIsSaving(true);
     const slug = title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
     const { error } = await supabase.from("blogs").update({
@@ -174,7 +175,7 @@ export default function EditBlogPage() {
       router.push("/admin/blog");
       router.refresh();
     } else {
-      alert("Error: " + error.message);
+      toast("Error: " + error.message);
       setIsSaving(false);
     }
   };

@@ -9,7 +9,7 @@ export const CallToActionSection: React.FC = () => {
   const waMessage = "Halo Mosya Gold, saya ingin ikut pendaftaran Batch Baru Tabungan Gotong Royong Emas Antam. Boleh minta info detailnya?";
 
   return (
-    <section id="gotong-royong-section" className="py-20 sm:py-24 bg-[#0A0B0D] relative overflow-hidden">
+    <section id="gotong-royong-section" className="py-20 sm:py-24 bg-[#0b213b] relative overflow-hidden">
       {/* Background Decorative - Nuansa Emas & Gelap */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(201,169,97,0.1),transparent_70%)]"></div>
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A961]/30 to-transparent"></div>

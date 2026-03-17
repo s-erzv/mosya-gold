@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { Loader2, Plus, Upload, X, ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
@@ -73,7 +74,7 @@ export default function AddProductPage() {
       router.push("/admin/products");
       router.refresh();
     } catch (error: any) {
-      alert("Error: " + error.message);
+      toast("Error: " + error.message);
     } finally {
       setLoading(false);
     }

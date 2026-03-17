@@ -12,7 +12,7 @@ import {
 
 export const ServiceBuybackSection: React.FC = () => {
   return (
-    <section id="buyback-section" className="py-20 bg-white dark:bg-[#0F1115] relative overflow-hidden">
+    <section id="buyback-section" className="py-20 bg-white dark:bg-[#0b213b] relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-[#C9A961]/30 to-transparent"></div>
       

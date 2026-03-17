@@ -93,7 +93,7 @@ export default function ProductGrid({ initialProducts }: { initialProducts: any[
                       }}
                       className={`whitespace-nowrap px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                         activeCategory === cat
-                          ? "bg-[#06101c] text-white shadow-md"
+                          ? "bg-[#0b213b] text-white shadow-md"
                           : "bg-white dark:bg-[#1A1D23] text-gray-400 border border-gray-100 dark:border-gray-800"
                       }`}
                     >
@@ -137,7 +137,7 @@ export default function ProductGrid({ initialProducts }: { initialProducts: any[
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="p-3 rounded-xl border border-gray-100 dark:border-gray-800 disabled:opacity-20 text-[#06101c] dark:text-[#C9A961]"
+            className="p-3 rounded-xl border border-gray-100 dark:border-gray-800 disabled:opacity-20 text-[#0b213b] dark:text-[#C9A961]"
           >
             <ChevronLeft size={20} />
           </button>
@@ -161,7 +161,7 @@ export default function ProductGrid({ initialProducts }: { initialProducts: any[
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="p-3 rounded-xl border border-gray-100 dark:border-gray-800 disabled:opacity-20 text-[#06101c] dark:text-[#C9A961]"
+            className="p-3 rounded-xl border border-gray-100 dark:border-gray-800 disabled:opacity-20 text-[#0b213b] dark:text-[#C9A961]"
           >
             <ChevronRight size={20} />
           </button>

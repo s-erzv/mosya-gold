@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 export default function BlogManagement() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -41,7 +42,7 @@ export default function BlogManagement() {
     const { error } = await supabase.from("blogs").delete().eq("id", id);
     
     if (error) {
-      alert("Gagal menghapus: " + error.message);
+      toast("Gagal menghapus: " + error.message);
     } else {
       fetchPosts();
     }
